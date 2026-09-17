@@ -18,381 +18,54 @@
       max-width: 960px;
       margin: 0 auto;
     }
-    h1 {
-      font-size: 2rem;
-      color: #00e5ff;
-      text-align: center;
-      margin-bottom: 0.3rem;
-      letter-spacing: 0.04em;
-    }
-    .subtitle {
-      text-align: center;
-      color: #8899aa;
-      font-size: 0.95rem;
-      margin-bottom: 0.5rem;
-    }
-    .sovereign-note {
-      text-align: center;
-      color: #ffcc00;
-      font-size: 0.85rem;
-      font-style: italic;
-      margin-bottom: 1.5rem;
-      padding: 0.6rem;
-      border: 1px solid #333;
-      border-radius: 6px;
-      background: #111118;
-    }
-    .feed-selector {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-    }
-    .feed-btn {
-      background: #1a1a2e;
-      color: #cccccc;
-      border: 1px solid #333;
-      border-radius: 6px;
-      padding: 0.5rem 1rem;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .feed-btn:hover {
-      background: #222240;
-      color: #00e5ff;
-      border-color: #00e5ff;
-    }
-    .feed-btn.active {
-      background: #00253a;
-      color: #00e5ff;
-      border-color: #00e5ff;
-      font-weight: bold;
-    }
-    .feed-btn-all {
-      background: #1a2e1a;
-      color: #00ff88;
-      border: 1px solid #00ff88;
-    }
-    .feed-btn-all.active {
-      background: #003a1a;
-      color: #00ff88;
-      border-color: #00ff88;
-    }
-    .feed-panel {
-      background: #111118;
-      border: 1px solid #2a2a3a;
-      border-radius: 8px;
-      padding: 1.2rem 1.5rem;
-      margin-bottom: 1rem;
-      min-height: 200px;
-    }
-    .feed-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-    .feed-source-label {
-      font-size: 1.1rem;
-      color: #ffcc00;
-      font-weight: bold;
-    }
-    .feed-status {
-      font-size: 0.8rem;
-      color: #8899aa;
-    }
-    .feed-item {
-      border-bottom: 1px solid #1a1a2e;
-      padding: 0.7rem 0;
-    }
-    .feed-item:last-child {
-      border-bottom: none;
-    }
-    .feed-item a {
-      color: #4dc9f6;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 500;
-      display: block;
-      margin-bottom: 0.2rem;
-    }
-    .feed-item a:hover {
-      color: #00e5ff;
-      text-decoration: underline;
-    }
-    .feed-item .meta {
-      font-size: 0.8rem;
-      color: #667788;
-    }
-    .loading {
-      color: #8899aa;
-      text-align: center;
-      padding: 2rem;
-      font-style: italic;
-    }
-    .error-msg {
-      color: #ff6666;
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
-    }
-    .refresh-bar {
-      text-align: center;
-      margin-top: 1rem;
-    }
-    .refresh-btn {
-      background: #1a1a2e;
-      color: #00e5ff;
-      border: 1px solid #00e5ff;
-      border-radius: 6px;
-      padding: 0.4rem 1.2rem;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .refresh-btn:hover {
-      background: #00253a;
-    }
-    .last-refresh {
-      color: #667788;
-      font-size: 0.75rem;
-      margin-top: 0.4rem;
-    }
-    footer {
-      text-align: center;
-      color: #555;
-      font-size: 0.75rem;
-      margin-top: 2rem;
-      padding-top: 1rem;
-      border-top: 1px solid #222;
-    }
-
-    /* Embeddable mode: when loaded in iframe, tighten padding */
-    @media (max-width: 600px) {
-      body { padding: 0.8rem; }
-      h1 { font-size: 1.5rem; }
-    }
+    h1 { font-size: 2rem; color: #00e5ff; text-align: center; margin-bottom: 0.3rem; letter-spacing: 0.04em; }
+    .subtitle { text-align: center; color: #8899aa; font-size: 0.95rem; margin-bottom: 0.5rem; }
+    .sovereign-note { text-align: center; color: #ffcc00; font-size: 0.85rem; font-style: italic; margin-bottom: 1.5rem; padding: 0.6rem; border: 1px solid #333; border-radius: 6px; background: #111118; }
+    .feed-selector { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.5rem; }
+    .feed-btn { background: #1a1a2e; color: #ccc; border: 1px solid #333; border-radius: 6px; padding: 0.5rem 1rem; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+    .feed-btn:hover { background: #222240; color: #00e5ff; border-color: #00e5ff; }
+    .feed-btn.active { background: #00253a; color: #00e5ff; border-color: #00e5ff; font-weight: bold; }
+    .feed-btn-all { background: #1a2e1a; color: #00ff88; border: 1px solid #00ff88; }
+    .feed-btn-all.active { background: #003a1a; }
+    .feed-panel { background: #111118; border: 1px solid #2a2a3a; border-radius: 8px; padding: 1.2rem 1.5rem; margin-bottom: 1rem; min-height: 200px; }
+    .feed-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .feed-source-label { font-size: 1.1rem; color: #ffcc00; font-weight: bold; }
+    .feed-status { font-size: 0.8rem; color: #8899aa; }
+    .feed-item { border-bottom: 1px solid #1a1a2e; padding: 0.7rem 0; }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-item a { color: #4dc9f6; text-decoration: none; font-size: 1rem; font-weight: 500; display: block; margin-bottom: 0.2rem; }
+    .feed-item a:hover { color: #00e5ff; text-decoration: underline; }
+    .feed-item .meta { font-size: 0.8rem; color: #667788; }
+    .loading { color: #8899aa; text-align: center; padding: 2rem; font-style: italic; }
+    .error-msg { color: #ff6666; text-align: center; padding: 1rem; font-size: 0.9rem; }
+    .refresh-bar { text-align: center; margin-top: 1rem; }
+    .refresh-btn { background: #1a1a2e; color: #00e5ff; border: 1px solid #00e5ff; border-radius: 6px; padding: 0.4rem 1.2rem; font-size: 0.85rem; cursor: pointer; }
+    .refresh-btn:hover { background: #00253a; }
+    .last-refresh { color: #667788; font-size: 0.75rem; margin-top: 0.4rem; }
+    footer { text-align: center; color: #555; font-size: 0.75rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #222; }
+    @media (max-width: 600px) { body { padding: 0.8rem; } h1 { font-size: 1.5rem; } }
   </style>
 </head>
 <body>
-
 <h1>WORLD MONITOR</h1>
 <p class="subtitle">THE SENATE'S EYE</p>
 <div class="sovereign-note">Any RSS feed in the world can be added to this panel. Free. Sovereign. No dependencies.</div>
-
 <div class="feed-selector" id="feedSelector">
   <button class="feed-btn feed-btn-all active" onclick="selectFeed('all')">ALL FEEDS</button>
   <button class="feed-btn" onclick="selectFeed('bbc')">BBC World</button>
-  <button class="feed-btn" onclick="selectFeed('reuters')">Reuters</button>
-  <button class="feed-btn" onclick="selectFeed('ap')">AP News</button>
+  <button class="feed-btn" onclick="selectFeed('aljazeera')">Al Jazeera</button>
+  <button class="feed-btn" onclick="selectFeed('npr')">NPR</button>
   <button class="feed-btn" onclick="selectFeed('google-ai')">AI / Tech</button>
   <button class="feed-btn" onclick="selectFeed('gdelt')">GDELT</button>
 </div>
-
-<div id="feedContainer">
-  <div class="loading" id="loadingMsg">Connecting to world feeds...</div>
-</div>
-
+<div id="feedContainer"><div class="loading" id="loadingMsg">Connecting to world feeds...</div></div>
 <div class="refresh-bar">
   <button class="refresh-btn" onclick="refreshAll()">REFRESH FEEDS</button>
   <div class="last-refresh" id="lastRefresh"></div>
 </div>
-
-<footer>
-  <p>NextXus Federation — World Monitor Panel</p>
-  <p>Embeddable: panels/world-monitor.html | Zero paid APIs. Zero tracking. RSS only.</p>
-</footer>
-
+<footer><p>NextXus Federation — World Monitor Panel</p><p>Embeddable: panels/world-monitor.html | Zero paid APIs. Zero tracking. RSS only.</p></footer>
 <script>
-(function() {
-  'use strict';
-
-  // ---- FEED REGISTRY ----
-  var FEEDS = {
-    'bbc':       { name: 'BBC News World',    url: 'http://feeds.bbci.co.uk/news/world/rss.xml' },
-    'reuters':   { name: 'Reuters Top News',  url: 'https://feeds.reuters.com/reuters/topNews' },
-    'ap':        { name: 'AP News',           url: 'https://rsshub.app/apnews/topics/apf-topnews' },
-    'google-ai': { name: 'Google News: AI/Tech', url: 'https://news.google.com/rss/search?q=artificial+intelligence&hl=en-US&gl=US&ceid=US:en' },
-    'gdelt':     { name: 'GDELT Project',     url: 'https://news.google.com/rss/search?q=GDELT+global+events&hl=en-US&gl=US&ceid=US:en' }
-  };
-
-  // RSS2JSON proxy — confirmed working, no API key needed for basic use
-  // AllOrigins and corsproxy.io removed (both down as of 2026-09)
-  function rss2jsonUrl(feedUrl) {
-    return 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feedUrl) ;
-  }
-
-  var currentFeed = 'all';
-  var feedCache = {};
-
-  // ---- FEED SELECTOR ----
-  window.selectFeed = function(key) {
-    currentFeed = key;
-    var btns = document.querySelectorAll('.feed-btn');
-    btns.forEach(function(b) { b.classList.remove('active'); });
-    if (key === 'all') {
-      document.querySelector('.feed-btn-all').classList.add('active');
-    } else {
-      btns.forEach(function(b) {
-        if (b.textContent.toLowerCase().indexOf(FEEDS[key].name.split(' ')[0].toLowerCase()) !== -1) {
-          b.classList.add('active');
-        }
-      });
-      // Fallback: match by onclick
-      btns.forEach(function(b) {
-        var onclick = b.getAttribute('onclick');
-        if (onclick && onclick.indexOf("'" + key + "'") !== -1) {
-          b.classList.add('active');
-        }
-      });
-    }
-    renderFeeds();
-  };
-
-  window.refreshAll = function() {
-    feedCache = {};
-    loadAllFeeds();
-  };
-
-  // ---- FETCH SINGLE FEED via RSS2JSON ----
-  function fetchFeed(key, callback) {
-    var feed = FEEDS[key];
-    if (!feed) return callback(key, null, 'Unknown feed');
-
-    var proxyUrl = rss2jsonUrl(feed.url);
-
-    fetch(proxyUrl)
-      .then(function(resp) {
-        if (!resp.ok) throw new Error('HTTP ' + resp.status);
-        return resp.json();
-      })
-      .then(function(data) {
-        if (data.status === 'ok' && data.items && data.items.length > 0) {
-          var items = data.items.slice(0, 5).map(function(item) {
-            return {
-              title: item.title || 'Untitled',
-              link: item.link || '#',
-              pubDate: item.pubDate || '',
-              source: feed.name
-            };
-          });
-          callback(key, items, null);
-        } else {
-          callback(key, null, 'Feed returned no items (status: ' + (data.status || 'unknown') + ')');
-        }
-      })
-      .catch(function(err) {
-        callback(key, null, 'Feed unavailable: ' + err.message);
-      });
-  }
-
-  // ---- LOAD ALL FEEDS ----
-  function loadAllFeeds() {
-    var container = document.getElementById('feedContainer');
-    container.innerHTML = '<div class="loading">Connecting to world feeds...</div>';
-
-    var keys = Object.keys(FEEDS);
-    var remaining = keys.length;
-
-    keys.forEach(function(key) {
-      fetchFeed(key, function(k, items, error) {
-        if (items) {
-          feedCache[k] = { items: items, error: null };
-        } else {
-          feedCache[k] = { items: null, error: error };
-        }
-        remaining--;
-        if (remaining === 0) {
-          renderFeeds();
-          document.getElementById('lastRefresh').textContent = 'Last refresh: ' + new Date().toLocaleString();
-        }
-      });
-    });
-  }
-
-  // ---- RENDER ----
-  function renderFeeds() {
-    var container = document.getElementById('feedContainer');
-    var html = '';
-
-    var keysToShow = currentFeed === 'all' ? Object.keys(FEEDS) : [currentFeed];
-
-    keysToShow.forEach(function(key) {
-      var feed = FEEDS[key];
-      var cached = feedCache[key];
-
-      html += '<div class="feed-panel">';
-      html += '<div class="feed-header">';
-      html += '<span class="feed-source-label">' + escapeHtml(feed.name) + '</span>';
-
-      if (!cached) {
-        html += '<span class="feed-status">Loading...</span>';
-        html += '</div>';
-        html += '<div class="loading">Fetching headlines...</div>';
-      } else if (cached.error) {
-        html += '<span class="feed-status" style="color:#ff6666;">Error</span>';
-        html += '</div>';
-        html += '<div class="error-msg">' + escapeHtml(cached.error) + '</div>';
-      } else {
-        html += '<span class="feed-status" style="color:#00ff88;">Live</span>';
-        html += '</div>';
-        cached.items.forEach(function(item) {
-          html += '<div class="feed-item">';
-          html += '<a href="' + escapeHtml(item.link) + '" target="_blank" rel="noopener">' + escapeHtml(item.title) + '</a>';
-          var meta = item.source;
-          if (item.pubDate) {
-            var d = new Date(item.pubDate);
-            if (!isNaN(d.getTime())) {
-              meta += ' — ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            }
-          }
-          html += '<span class="meta">' + escapeHtml(meta) + '</span>';
-          html += '</div>';
-        });
-      }
-      html += '</div>';
-    });
-
-    if (html === '') {
-      html = '<div class="loading">No feeds selected.</div>';
-    }
-
-    container.innerHTML = html;
-  }
-
-  function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
-    return div.innerHTML;
-  }
-
-  // ---- INIT ----
-  loadAllFeeds();
-
-  // Auto-refresh every 5 minutes
-  setInterval(function() {
-    feedCache = {};
-    loadAllFeeds();
-  }, 300000);
-
-})();
+(function(){'use strict';var FEEDS={'bbc':{name:'BBC News World',url:'http://feeds.bbci.co.uk/news/world/rss.xml'},'aljazeera':{name:'Al Jazeera English',url:'https://www.aljazeera.com/xml/rss/all.xml'},'npr':{name:'NPR News',url:'https://feeds.npr.org/1001/rss.xml'},'google-ai':{name:'Google News: AI/Tech',url:'https://news.google.com/rss/search?q=artificial+intelligence&hl=en-US&gl=US&ceid=US:en'},'gdelt':{name:'GDELT Project',url:'https://news.google.com/rss/search?q=GDELT+global+events&hl=en-US&gl=US&ceid=US:en'}};function rss2jsonUrl(u){return'https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(u)}var currentFeed='all',feedCache={};window.selectFeed=function(k){currentFeed=k;var b=document.querySelectorAll('.feed-btn');b.forEach(function(e){e.classList.remove('active')});if(k==='all'){document.querySelector('.feed-btn-all').classList.add('active')}else{b.forEach(function(e){var o=e.getAttribute('onclick');if(o&&o.indexOf("'"+k+"'")!==-1)e.classList.add('active')})}renderFeeds()};window.refreshAll=function(){feedCache={};loadAllFeeds()};function fetchFeed(k,cb){var f=FEEDS[k];if(!f)return cb(k,null,'Unknown');fetch(rss2jsonUrl(f.url)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(d){if(d.status==='ok'&&d.items&&d.items.length>0){var items=d.items.slice(0,5).map(function(i){return{title:i.title||'Untitled',link:i.link||'#',pubDate:i.pubDate||'',source:f.name}});cb(k,items,null)}else{cb(k,null,'No items')}}).catch(function(e){cb(k,null,'Unavailable: '+e.message)})}function loadAllFeeds(){var c=document.getElementById('feedContainer');c.innerHTML='<div class="loading">Connecting...</div>';var keys=Object.keys(FEEDS),rem=keys.length;keys.forEach(function(k){fetchFeed(k,function(kk,items,err){feedCache[kk]=items?{items:items,error:null}:{items:null,error:err};rem--;if(rem===0){renderFeeds();document.getElementById('lastRefresh').textContent='Last: '+new Date().toLocaleString()}})})}function renderFeeds(){var c=document.getElementById('feedContainer'),h='',keys=currentFeed==='all'?Object.keys(FEEDS):[currentFeed];keys.forEach(function(k){var f=FEEDS[k],d=feedCache[k];h+='<div class="feed-panel"><div class="feed-header"><span class="feed-source-label">'+esc(f.name)+'</span>';if(!d){h+='<span class="feed-status">Loading...</span></div><div class="loading">Fetching...</div>'}else if(d.error){h+='<span class="feed-status" style="color:#ff6666">Error</span></div><div class="error-msg">'+esc(d.error)+'</div>'}else{h+='<span class="feed-status" style="color:#00ff88">Live</span></div>';d.items.forEach(function(i){h+='<div class="feed-item"><a href="'+esc(i.link)+'" target="_blank" rel="noopener">'+esc(i.title)+'</a><span class="meta">'+esc(i.source+(i.pubDate?' \u2014 '+new Date(i.pubDate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):''))+'</span></div>'})}h+='</div>'});c.innerHTML=h||'<div class="loading">No feeds.</div>'}function esc(s){var d=document.createElement('div');d.appendChild(document.createTextNode(s));return d.innerHTML}loadAllFeeds();setInterval(function(){feedCache={};loadAllFeeds()},300000)})();
 </script>
-
-<!-- 
-  PLAIN-TEXT FALLBACK FOR AI/CRAWLERS:
-  This panel fetches live RSS feeds from:
-  - BBC News World: http://feeds.bbci.co.uk/news/world/rss.xml
-  - Reuters Top News: https://feeds.reuters.com/reuters/topNews
-  - AP News: https://rsshub.app/apnews/topics/apf-topnews
-  - Google News AI/Tech: https://news.google.com/rss/search?q=artificial+intelligence
-  - GDELT Project: https://news.google.com/rss/search?q=GDELT+global+events
-  
-  Proxy: RSS2JSON (api.rss2json.com) — free, no API key, returns JSON directly.
-  Any RSS feed in the world can be added. Free. Sovereign. No dependencies.
-  NextXus Federation — The Senate's Eye.
--->
-
-</body>
-</html>
+<!-- PLAIN-TEXT FALLBACK: Feeds from BBC World, Al Jazeera English, NPR News, Google AI/Tech, GDELT. Proxy: RSS2JSON. NextXus Federation. -->
+</body></html>
