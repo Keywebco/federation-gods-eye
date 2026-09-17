@@ -221,7 +221,7 @@
   // Free RSS-to-JSON proxies (fallback chain)
   var PROXIES = [
     function(feedUrl) { return 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feedUrl) + '&count=5'; },
-    function(feedUrl) { return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(feedUrl); }
+    function(feedUrl) { return 'https://api.allorigins.win/get?url=' + encodeURIComponent(feedUrl); }
   ];
 
   var currentFeed = 'all';
@@ -289,7 +289,7 @@
       });
   }
 
-  // ---- FALLBACK: fetch raw XML via allorigins ----
+  // ---- FALLBACK: fetch raw XML via allorigins /get (returns JSON with .contents) ----
   function fetchFeedRaw(key, callback) {
     var feed = FEEDS[key];
     var proxyUrl = PROXIES[1](feed.url);
@@ -297,9 +297,10 @@
     fetch(proxyUrl)
       .then(function(resp) {
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
-        return resp.text();
+        return resp.json();
       })
-      .then(function(xmlText) {
+      .then(function(data) {
+        var xmlText = data.contents || '';
         var parser = new DOMParser();
         var doc = parser.parseFromString(xmlText, 'text/xml');
         var rssItems = doc.querySelectorAll('item');
