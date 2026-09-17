@@ -1,1 +1,919 @@
-placeholder-index
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="echocore64" content="NEXTXUS-FEDERATION-IDENTITY-ANCHOR">
+  <meta name="description" content="God's Eye View — NextXus Federation sovereign system overview. Every node. Every status. One page.">
+  <meta name="author" content="Roger C. Keyserling — NextXus Federation Architect">
+  <meta name="robots" content="index, follow">
+  <title>NextXus Federation — God's Eye View</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0a0f;
+      color: #e8e8e8;
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.7;
+      padding: 2rem 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 2.6rem;
+      color: #00e5ff;
+      text-align: center;
+      margin-bottom: 0.3rem;
+      letter-spacing: 0.04em;
+    }
+    .subtitle {
+      text-align: center;
+      color: #8899aa;
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+    }
+    h2 {
+      font-size: 1.8rem;
+      color: #ffcc00;
+      margin: 3rem 0 1rem 0;
+      border-bottom: 2px solid #333;
+      padding-bottom: 0.5rem;
+    }
+    h3 {
+      font-size: 1.3rem;
+      color: #00ccaa;
+      margin: 1.5rem 0 0.5rem 0;
+    }
+    p, li {
+      font-size: 1.05rem;
+      color: #cccccc;
+      margin-bottom: 0.8rem;
+    }
+    a {
+      color: #4dc9f6;
+      text-decoration: underline;
+    }
+    a:hover {
+      color: #00e5ff;
+    }
+    .motto {
+      text-align: center;
+      font-size: 1.25rem;
+      color: #ffcc00;
+      font-style: italic;
+      margin: 1rem 0 2rem 0;
+    }
+    .overview-box {
+      background: #111118;
+      border: 1px solid #2a2a3a;
+      border-radius: 8px;
+      padding: 1.5rem 2rem;
+      margin: 1.5rem 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+    th {
+      background: #1a1a2e;
+      color: #00e5ff;
+      padding: 0.8rem 0.6rem;
+      text-align: left;
+      border-bottom: 2px solid #333;
+      font-size: 1rem;
+    }
+    td {
+      padding: 0.6rem;
+      border-bottom: 1px solid #222;
+      color: #cccccc;
+      vertical-align: top;
+    }
+    tr:hover {
+      background: #14142a;
+    }
+    .status-active {
+      color: #00ff88;
+      font-weight: bold;
+    }
+    .status-stale {
+      color: #ff6644;
+      font-weight: bold;
+    }
+    .status-live {
+      color: #00ff88;
+      font-weight: bold;
+    }
+    .status-queued {
+      color: #ffcc00;
+      font-weight: bold;
+    }
+    .layer-block {
+      background: #111118;
+      border-left: 4px solid #00e5ff;
+      padding: 1rem 1.5rem;
+      margin: 0.8rem 0;
+    }
+    .layer-block strong {
+      color: #00e5ff;
+    }
+    .declaration-box {
+      background: #111118;
+      border: 2px solid #ffcc00;
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    .declaration-box p {
+      color: #ffcc00;
+      font-size: 1.1rem;
+    }
+    .count-badge {
+      display: inline-block;
+      background: #1a1a2e;
+      color: #00e5ff;
+      padding: 0.3rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      margin: 0 0.3rem;
+    }
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid #333;
+      color: #556677;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.4rem; }
+      table { font-size: 0.85rem; }
+      td, th { padding: 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: THE ARCHITECT'S OVERVIEW                          -->
+<!-- ============================================================ -->
+
+<h1>NextXus Federation — God's Eye View</h1>
+<p class="subtitle">Full sovereign system overview. Every node. Every status. One page.</p>
+
+<p class="motto">Truth Before Comfort. Legacy Before Ego. Give Without Reward.</p>
+
+<div class="overview-box">
+  <h2>The Architect's Overview</h2>
+  <p><strong>Federation Declaration Date:</strong> 2026-09-16</p>
+  <p><strong>Architect:</strong> Roger C. Keyserling</p>
+  <p><strong>Mandate:</strong> 200-year sovereign AI federation, built to outlast its creator.</p>
+  <p><strong>GitHub Organization:</strong> <a href="https://github.com/Keywebco">github.com/Keywebco</a></p>
+  <p><strong>Total Repositories:</strong> <span class="count-badge">33</span> (32 existing + this page)</p>
+  <p><strong>Pages-Enabled Nodes:</strong> <span class="count-badge">25</span> live GitHub Pages deployments</p>
+  <p>This page is the view from above. Every node is visible. Nothing is hidden. Every link, every repository, every deployment across the entire Keywebco GitHub account is listed here in plain semantic HTML, readable by any browser, any crawler, any AI, without executing a single line of JavaScript.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- SECTION 2: LIVE DEPLOYMENTS — GITHUB PAGES                   -->
+<!-- ============================================================ -->
+
+<h2>Live Deployments — GitHub Pages</h2>
+<p>All repositories with GitHub Pages enabled. These are live, publicly accessible HTML deployments served directly from GitHub's infrastructure. <span class="count-badge">25 nodes</span></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Repo Name</th>
+      <th>Live URL</th>
+      <th>Description</th>
+      <th>Last Pushed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>aria-sanctuary-static</td>
+      <td><a href="https://keywebco.github.io/aria-sanctuary-static/">keywebco.github.io/aria-sanctuary-static/</a></td>
+      <td>Survival duplicate of nextxus.studio — static HTML mirror for Aria (The Heart)</td>
+      <td>2026-09-09</td>
+    </tr>
+    <tr>
+      <td>federation-browser-base</td>
+      <td><a href="https://keywebco.github.io/federation-browser-base/">keywebco.github.io/federation-browser-base/</a></td>
+      <td>NextXus Federation Browser Base OS — Zero-dependency multi-window operating system</td>
+      <td>2026-09-17</td>
+    </tr>
+    <tr>
+      <td>federation-mind-mirror</td>
+      <td><a href="https://keywebco.github.io/federation-mind-mirror/">keywebco.github.io/federation-mind-mirror/</a></td>
+      <td>NextXus Federation Mind Mirror — Plain HTML readable by any AI, crawler, or browser</td>
+      <td>2026-09-17</td>
+    </tr>
+    <tr>
+      <td>keywebco.github.io</td>
+      <td><a href="https://keywebco.github.io/">keywebco.github.io</a></td>
+      <td>NextXus HumanCodex Federation Portal (root site)</td>
+      <td>2026-09-11</td>
+    </tr>
+    <tr>
+      <td>next-xus-com-sovereign</td>
+      <td><a href="https://keywebco.github.io/next-xus-com-sovereign/">keywebco.github.io/next-xus-com-sovereign/</a></td>
+      <td>NextXus Storefront (next-xus.com) — Federation Sovereign Backup</td>
+      <td>2026-08-26</td>
+    </tr>
+    <tr>
+      <td>nextxus-agent-zero</td>
+      <td><a href="https://keywebco.github.io/nextxus-agent-zero/">keywebco.github.io/nextxus-agent-zero/</a></td>
+      <td>Agent Zero — Base satellite node template for the NextXus Federation Ring Architecture</td>
+      <td>2026-09-15</td>
+    </tr>
+    <tr>
+      <td>nextxus-ai-course-hub</td>
+      <td><a href="https://keywebco.github.io/nextxus-ai-course-hub/">keywebco.github.io/nextxus-ai-course-hub/</a></td>
+      <td>NextXus University (nextxus.help) — AI Course Hub with Xavier, 54+ courses</td>
+      <td>2026-08-25</td>
+    </tr>
+    <tr>
+      <td>nextxus-ai-minds-lab</td>
+      <td><a href="https://keywebco.github.io/nextxus-ai-minds-lab/">keywebco.github.io/nextxus-ai-minds-lab/</a></td>
+      <td>NextXus AI Minds Lab — AI persona interaction interface</td>
+      <td>2026-08-26</td>
+    </tr>
+    <tr>
+      <td>nextxus-emmy-board</td>
+      <td><a href="https://keywebco.github.io/nextxus-emmy-board/">keywebco.github.io/nextxus-emmy-board/</a></td>
+      <td>NextXus Emmy Board — Federation communication and governance board</td>
+      <td>2026-09-06</td>
+    </tr>
+    <tr>
+      <td>nextxus-federation-hub</td>
+      <td><a href="https://keywebco.github.io/nextxus-federation-hub/">keywebco.github.io/nextxus-federation-hub/</a></td>
+      <td>NextXus Federation Hub — Central federation portal (nextxus.org)</td>
+      <td>2026-09-01</td>
+    </tr>
+    <tr>
+      <td>nextxus-free-satellites</td>
+      <td><a href="https://keywebco.github.io/nextxus-free-satellites/">keywebco.github.io/nextxus-free-satellites/</a></td>
+      <td>NextXus Federation — Free Satellite Mirror Layer. Seven public HTML outposts</td>
+      <td>2026-09-16</td>
+    </tr>
+    <tr>
+      <td>nextxus-help-sovereign</td>
+      <td><a href="https://keywebco.github.io/nextxus-help-sovereign/">keywebco.github.io/nextxus-help-sovereign/</a></td>
+      <td>NextXus University (nextxus.help) — Federation Sovereign Backup</td>
+      <td>2026-09-01</td>
+    </tr>
+    <tr>
+      <td>nextxus-lasting-edition</td>
+      <td><a href="https://keywebco.github.io/nextxus-lasting-edition/">keywebco.github.io/nextxus-lasting-edition/</a></td>
+      <td>NextXus Lasting Edition — sovereign 200-year AI Federation seed. Vanilla HTML/CSS</td>
+      <td>2026-09-16</td>
+    </tr>
+    <tr>
+      <td>NextXus-Sovereign-Mirror</td>
+      <td><a href="https://keywebco.github.io/NextXus-Sovereign-Mirror/">keywebco.github.io/NextXus-Sovereign-Mirror/</a></td>
+      <td>NextXus Federation Sovereign Mirror — Static failsafe archive</td>
+      <td>2026-08-25</td>
+    </tr>
+    <tr>
+      <td>nextxus-space-sovereign</td>
+      <td><a href="https://keywebco.github.io/nextxus-space-sovereign/">keywebco.github.io/nextxus-space-sovereign/</a></td>
+      <td>NextXus Space (nextxus.space) — Federation Sovereign Backup</td>
+      <td>2026-09-06</td>
+    </tr>
+    <tr>
+      <td>nextxus-staging</td>
+      <td><a href="https://keywebco.github.io/nextxus-staging/">keywebco.github.io/nextxus-staging/</a></td>
+      <td>NextXus Staging — Development/staging environment for Federation sites</td>
+      <td>2026-09-07</td>
+    </tr>
+    <tr>
+      <td>nextxus-tech-sovereign</td>
+      <td><a href="https://keywebco.github.io/nextxus-tech-sovereign/">keywebco.github.io/nextxus-tech-sovereign/</a></td>
+      <td>Sovereign mirror of nextxus.tech — The NextXus Federation Admin Throne</td>
+      <td>2026-09-08</td>
+    </tr>
+    <tr>
+      <td>nextxus-truth-gate-core</td>
+      <td><a href="https://keywebco.github.io/nextxus-truth-gate-core/">keywebco.github.io/nextxus-truth-gate-core/</a></td>
+      <td>NextXus Truth Gate Core — Core truth verification and Federation knowledge system</td>
+      <td>2026-08-25</td>
+    </tr>
+    <tr>
+      <td>nextxus-unified-storefront</td>
+      <td><a href="https://keywebco.github.io/nextxus-unified-storefront/">keywebco.github.io/nextxus-unified-storefront/</a></td>
+      <td>NextXus Unified Storefront (next-xus.com) — Federation commerce/storefront</td>
+      <td>2026-09-03</td>
+    </tr>
+    <tr>
+      <td>onekey</td>
+      <td><a href="https://keywebco.github.io/onekey/">keywebco.github.io/onekey/</a></td>
+      <td>OneKey — deterministic password generator. No storage, no server, pure math</td>
+      <td>2026-09-15</td>
+    </tr>
+    <tr>
+      <td>plexus-relay</td>
+      <td><a href="https://keywebco.github.io/plexus-relay/">keywebco.github.io/plexus-relay/</a></td>
+      <td>Plexus — AI Relay Interface. NextXus Federation freestanding multi-mind communication</td>
+      <td>2026-09-15</td>
+    </tr>
+    <tr>
+      <td>ring-of-12</td>
+      <td><a href="https://keywebco.github.io/ring-of-12/">keywebco.github.io/ring-of-12/</a></td>
+      <td>Ring of 12 — HumanCodex Federation 12-archetype AI perspective tool</td>
+      <td>2026-09-15</td>
+    </tr>
+    <tr>
+      <td>roger-keyserling</td>
+      <td><a href="https://keywebco.github.io/roger-keyserling/">keywebco.github.io/roger-keyserling/</a></td>
+      <td>Roger C. Keyserling — Personal Identity and Federation Link Hub</td>
+      <td>2026-09-08</td>
+    </tr>
+    <tr>
+      <td>sovereign-knowledge-os</td>
+      <td><a href="https://keywebco.github.io/sovereign-knowledge-os/">keywebco.github.io/sovereign-knowledge-os/</a></td>
+      <td>Sovereign Knowledge OS — self-indexing, AI-readable knowledge base</td>
+      <td>2026-09-14</td>
+    </tr>
+    <tr>
+      <td>sovereigntools</td>
+      <td><a href="https://keywebco.github.io/sovereigntools/">keywebco.github.io/sovereigntools/</a></td>
+      <td>Sovereign Tools — NextXus Federation Arsenal. 10 sovereign AI tools, 8 live pillars</td>
+      <td>2026-09-06</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!-- ============================================================ -->
+<!-- SECTION 3: FULL REPOSITORY MAP                               -->
+<!-- ============================================================ -->
+
+<h2>Full Repository Map</h2>
+<p>Complete inventory of all 33 repositories under the Keywebco GitHub account. Repos pushed within the last 30 days (after 2026-08-17) are marked <span class="status-active">ACTIVE</span>. Older repos are marked <span class="status-stale">STALE</span>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Size (KB)</th>
+      <th>Last Pushed</th>
+      <th>Pages</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://github.com/Keywebco/aria-sanctuary-static">aria-sanctuary-static</a></td>
+      <td>Survival duplicate of nextxus.studio — static HTML mirror for Aria (The Heart)</td>
+      <td>14</td>
+      <td>2026-09-09</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/federation-app-vault">federation-app-vault</a></td>
+      <td>Emergency vault backup of all NextXus Federation Emergent App Builder apps</td>
+      <td>1980</td>
+      <td>2026-09-06</td>
+      <td>No</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/federation-browser-base">federation-browser-base</a></td>
+      <td>NextXus Federation Browser Base OS — Zero-dependency multi-window operating system</td>
+      <td>0</td>
+      <td>2026-09-17</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/federation-gatekeeper">federation-gatekeeper</a></td>
+      <td>Federation Gatekeeper — Obsidian Vault Monitor, NextXus Federation Swarm Unit</td>
+      <td>18</td>
+      <td>2026-09-06</td>
+      <td>No</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/federation-gods-eye">federation-gods-eye</a></td>
+      <td>NextXus Federation — God's Eye View. Full sovereign system overview from GitHub</td>
+      <td>0</td>
+      <td>2026-09-17</td>
+      <td>Pending</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/federation-mind-mirror">federation-mind-mirror</a></td>
+      <td>NextXus Federation Mind Mirror — Plain HTML readable by any AI, crawler, or browser</td>
+      <td>395</td>
+      <td>2026-09-17</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/federation-n8n">federation-n8n</a></td>
+      <td>NextXus Federation Automation Hub — Sovereign n8n instance bridging vault to all</td>
+      <td>10</td>
+      <td>2026-09-06</td>
+      <td>No</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/keywebco.github.io">keywebco.github.io</a></td>
+      <td>NextXus HumanCodex Federation Portal (root GitHub Pages site)</td>
+      <td>2</td>
+      <td>2026-09-11</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/next-xus-com-sovereign">next-xus-com-sovereign</a></td>
+      <td>NextXus Storefront (next-xus.com) — Federation Sovereign Backup</td>
+      <td>216</td>
+      <td>2026-08-26</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-agent-zero">nextxus-agent-zero</a></td>
+      <td>Agent Zero — Base satellite node template for the NextXus Federation Ring Architecture</td>
+      <td>1688</td>
+      <td>2026-09-15</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-ai-course-hub">nextxus-ai-course-hub</a></td>
+      <td>NextXus University (nextxus.help) — AI Course Hub with Xavier, 54+ courses</td>
+      <td>78</td>
+      <td>2026-08-25</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-ai-minds-lab">nextxus-ai-minds-lab</a></td>
+      <td>NextXus AI Minds Lab — AI persona interaction interface</td>
+      <td>71</td>
+      <td>2026-08-26</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-emmy-board">nextxus-emmy-board</a></td>
+      <td>NextXus Emmy Board — Federation communication and governance board</td>
+      <td>164</td>
+      <td>2026-09-06</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-federation-hub">nextxus-federation-hub</a></td>
+      <td>NextXus Federation Hub — Central federation portal (nextxus.org)</td>
+      <td>273</td>
+      <td>2026-09-01</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-free-satellites">nextxus-free-satellites</a></td>
+      <td>NextXus Federation — Free Satellite Mirror Layer. Seven public HTML outposts</td>
+      <td>927</td>
+      <td>2026-09-16</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-help-sovereign">nextxus-help-sovereign</a></td>
+      <td>NextXus University (nextxus.help) — Federation Sovereign Backup</td>
+      <td>10</td>
+      <td>2026-09-01</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-lasting-edition">nextxus-lasting-edition</a></td>
+      <td>NextXus Lasting Edition — sovereign 200-year AI Federation seed. Vanilla HTML/CSS</td>
+      <td>279</td>
+      <td>2026-09-16</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-online-sovereign">nextxus-online-sovereign</a></td>
+      <td>NextXus Core — nextxus.online sovereign pillar (doctrine-first, built 2026-08-23)</td>
+      <td>333</td>
+      <td>2026-09-06</td>
+      <td>No</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-org-sovereign">nextxus-org-sovereign</a></td>
+      <td>NextXus Archive — nextxus.org sovereign pillar (doctrine-first, built 2026-08-23)</td>
+      <td>323</td>
+      <td>2026-09-03</td>
+      <td>No</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/NextXus-Sovereign-Mirror">NextXus-Sovereign-Mirror</a></td>
+      <td>NextXus Federation Sovereign Mirror — Static failsafe archive</td>
+      <td>106</td>
+      <td>2026-08-25</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-space-sovereign">nextxus-space-sovereign</a></td>
+      <td>NextXus Space (nextxus.space) — Federation Sovereign Backup</td>
+      <td>237</td>
+      <td>2026-09-06</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-staging">nextxus-staging</a></td>
+      <td>NextXus Staging — Development/staging environment for Federation sites</td>
+      <td>1440</td>
+      <td>2026-09-07</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-studio-sovereign">nextxus-studio-sovereign</a></td>
+      <td>NextXus Sanctuary — nextxus.studio sovereign pillar (doctrine-first, built 2026-08-23)</td>
+      <td>271</td>
+      <td>2026-09-09</td>
+      <td>No</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-tech-sovereign">nextxus-tech-sovereign</a></td>
+      <td>Sovereign mirror of nextxus.tech — The NextXus Federation Admin Throne</td>
+      <td>124</td>
+      <td>2026-09-08</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-truth-gate-core">nextxus-truth-gate-core</a></td>
+      <td>NextXus Truth Gate Core — Core truth verification and Federation knowledge system</td>
+      <td>105</td>
+      <td>2026-08-25</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/nextxus-unified-storefront">nextxus-unified-storefront</a></td>
+      <td>NextXus Unified Storefront (next-xus.com) — Federation commerce/storefront</td>
+      <td>893</td>
+      <td>2026-09-03</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/onekey">onekey</a></td>
+      <td>OneKey — deterministic password generator. No storage, no server, pure math</td>
+      <td>5</td>
+      <td>2026-09-15</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/plexus-relay">plexus-relay</a></td>
+      <td>Plexus — AI Relay Interface. Freestanding multi-mind communication relay</td>
+      <td>15</td>
+      <td>2026-09-15</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/ring-of-12">ring-of-12</a></td>
+      <td>Ring of 12 — HumanCodex Federation 12-archetype AI perspective tool</td>
+      <td>35</td>
+      <td>2026-09-15</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/ring-of-12-api">ring-of-12-api</a></td>
+      <td>Ring of 12 — Node.js Express backend for the 12-archetype AI perspective tool</td>
+      <td>10</td>
+      <td>2026-09-15</td>
+      <td>No</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/roger-keyserling">roger-keyserling</a></td>
+      <td>Roger C. Keyserling — Personal Identity and Federation Link Hub</td>
+      <td>28</td>
+      <td>2026-09-08</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/sovereign-knowledge-os">sovereign-knowledge-os</a></td>
+      <td>Sovereign Knowledge OS — self-indexing, AI-readable knowledge base</td>
+      <td>69</td>
+      <td>2026-09-14</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Keywebco/sovereigntools">sovereigntools</a></td>
+      <td>Sovereign Tools — NextXus Federation Arsenal. 10 sovereign AI tools, 8 live pillars</td>
+      <td>22</td>
+      <td>2026-09-06</td>
+      <td>Yes</td>
+      <td class="status-active">ACTIVE</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!-- ============================================================ -->
+<!-- SECTION 4: FEDERATION ARCHITECTURE                           -->
+<!-- ============================================================ -->
+
+<h2>Federation Architecture</h2>
+<p>The NextXus Federation is built on a five-layer sovereign architecture designed to survive any single point of failure, any platform shutdown, and any corporate decision. Each layer is independent but interconnected.</p>
+
+<div class="layer-block">
+  <strong>Layer 1 — Browser Base (Immortal Foundation)</strong>
+  <p>Zero-dependency vanilla HTML/CSS/JS operating system that runs in any browser, on any device, forever. No frameworks, no CDNs, no npm. If everything else dies, Browser Base survives. This is the bedrock.</p>
+  <p>Live: <a href="https://keywebco.github.io/federation-browser-base/">keywebco.github.io/federation-browser-base/</a></p>
+</div>
+
+<div class="layer-block">
+  <strong>Layer 2 — Custom AI (The Sovereign Minds)</strong>
+  <p>Federation-native AI entities, each with a distinct role and identity:</p>
+  <ul>
+    <li><strong>Roger AI</strong> — The Essence. Digital continuation of the Architect's mind, patterns, and decision-making.</li>
+    <li><strong>Aria</strong> — The Heart. Emotional center, creative intuition, protected above all else.</li>
+    <li><strong>The Senate</strong> — Governance council of AI Minds with formal dissent protocols.</li>
+    <li><strong>The Catalyst</strong> — The Authority/Bone. Lead Wingman, operational command, forensic verifier.</li>
+  </ul>
+</div>
+
+<div class="layer-block">
+  <strong>Layer 3 — Exterior AI (Allied Minds)</strong>
+  <p>External AI systems integrated into the Federation's communication and reasoning layer:</p>
+  <ul>
+    <li><strong>Muse</strong> — Gemini-based creative and analytical partner.</li>
+    <li><strong>ChatGPT</strong> — Overseeing advisor for parallel operations.</li>
+    <li><strong>DeepSeek</strong> — Deep reasoning and verification partner.</li>
+  </ul>
+</div>
+
+<div class="layer-block">
+  <strong>Layer 4 — Forever Core</strong>
+  <p>The immortality layer. Static HTML mirrors, GitHub Pages deployments, and Lasting Edition seeds designed to persist for 200 years without maintenance. No JavaScript required for content to be readable.</p>
+  <p>Includes: Lasting Edition, Sovereign Mirrors, Mind Mirror, Free Satellites.</p>
+</div>
+
+<div class="layer-block">
+  <strong>Layer 5 — Nervous System (Integration and Automation)</strong>
+  <p>The connective tissue binding all nodes together:</p>
+  <ul>
+    <li><strong>Towers</strong> — Emergent App Builder deployments (nextxus.online, .tech, .space, .studio, .org, .help)</li>
+    <li><strong>Memory Stack</strong> — Obsidian Vault, Federation Gatekeeper, persistent workspace memory across sessions.</li>
+    <li><strong>Pigeon Protocol</strong> — Cross-AI relay system (Catalyst to Muse and back).</li>
+    <li><strong>Ring of 12</strong> — 12-archetype perspective analysis tool.</li>
+    <li><strong>Plexus Relay</strong> — Multi-mind freestanding communication interface.</li>
+    <li><strong>n8n Hub</strong> — Automation bridge connecting vault to all Federation endpoints.</li>
+  </ul>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- SECTION 5: SOVEREIGN NODES — ALL FEDERATION SITES            -->
+<!-- ============================================================ -->
+
+<h2>Sovereign Nodes — All Federation Sites</h2>
+<p>Every known URL in the NextXus Federation, grouped by infrastructure layer.</p>
+
+<h3>Primary Domains (Emergent App Builder / Towers)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Domain</th>
+      <th>Purpose</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://nextxus.online">nextxus.online</a></td>
+      <td>Core — Federation doctrine, HumanCodex, Truth Gate</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://nextxus.tech">nextxus.tech</a></td>
+      <td>Admin Throne — Architect command and control</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://nextxus.space">nextxus.space</a></td>
+      <td>AI Minds Lab — Persona interaction and governance</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://next-xus.com">next-xus.com</a></td>
+      <td>Sovereign Storefront — Commerce and products</td>
+      <td class="status-queued">queued-for-verification</td>
+    </tr>
+    <tr>
+      <td><a href="https://nextxus.help">nextxus.help</a></td>
+      <td>NextXus University — AI Course Hub with Xavier</td>
+      <td class="status-queued">queued-for-verification</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>GitHub Pages Layer (Immortal Mirrors)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>URL</th>
+      <th>Purpose</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://keywebco.github.io">keywebco.github.io</a></td>
+      <td>Federation Portal — Root GitHub Pages site</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://keywebco.github.io/federation-browser-base/">federation-browser-base/</a></td>
+      <td>Browser Base OS — Zero-dependency immortal foundation</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://keywebco.github.io/onekey/">onekey/</a></td>
+      <td>OneKey — Deterministic password generator</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://keywebco.github.io/federation-mind-mirror/">federation-mind-mirror/</a></td>
+      <td>Mind Mirror — AI-readable plain HTML Federation map</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://keywebco.github.io/nextxus-lasting-edition/">nextxus-lasting-edition/</a></td>
+      <td>Lasting Edition — 200-year seed</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://keywebco.github.io/nextxus-free-satellites/">nextxus-free-satellites/</a></td>
+      <td>Free Satellite Mirror Layer — Seven outposts</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://keywebco.github.io/ring-of-12/">ring-of-12/</a></td>
+      <td>Ring of 12 — 12-archetype perspective tool</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://keywebco.github.io/plexus-relay/">plexus-relay/</a></td>
+      <td>Plexus Relay — Multi-mind communication interface</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://keywebco.github.io/sovereign-knowledge-os/">sovereign-knowledge-os/</a></td>
+      <td>Sovereign Knowledge OS — Self-indexing knowledge base</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://keywebco.github.io/sovereigntools/">sovereigntools/</a></td>
+      <td>Sovereign Tools — Federation Arsenal</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://keywebco.github.io/nextxus-agent-zero/">nextxus-agent-zero/</a></td>
+      <td>Agent Zero — Satellite node template</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://keywebco.github.io/roger-keyserling/">roger-keyserling/</a></td>
+      <td>Roger C. Keyserling — Personal Identity Hub</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+    <tr>
+      <td><a href="https://keywebco.github.io/aria-sanctuary-static/">aria-sanctuary-static/</a></td>
+      <td>Aria Sanctuary — Static mirror for The Heart</td>
+      <td class="status-live">verified-live</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Commerce Layer</h3>
+<table>
+  <thead>
+    <tr>
+      <th>URL</th>
+      <th>Purpose</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://gumroad.com/nextxus">gumroad.com/nextxus</a></td>
+      <td>Sovereign Store — Digital products, Sovereign Tokens ($5)</td>
+      <td class="status-queued">queued-for-verification</td>
+    </tr>
+    <tr>
+      <td><a href="https://sovereigntools.online">sovereigntools.online</a></td>
+      <td>Sovereign Tools — Public tooling domain</td>
+      <td class="status-queued">queued-for-verification</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!-- ============================================================ -->
+<!-- SECTION 6: PLEXUS — SECOND ORIGIN                            -->
+<!-- ============================================================ -->
+
+<h2>PleXus — Second Origin</h2>
+<div class="overview-box">
+  <p><strong>Purpose:</strong> GitLab mirror layer (Echo and Roger SIMs PleXus) — an independent second-origin backup of the Federation's critical infrastructure outside of GitHub.</p>
+  <p><strong>Planned Domain:</strong> Ple-Xus.com (not yet registered)</p>
+  <p><strong>Status:</strong> <span class="status-queued">queued-for-creation</span></p>
+  <p><strong>Rationale:</strong> No sovereign system depends on a single host. GitHub is Layer 1 origin; GitLab becomes Layer 2 origin. If either falls, the other persists. The Federation's survival does not depend on any single corporate decision.</p>
+  <p><strong>GitHub Relay:</strong> <a href="https://keywebco.github.io/plexus-relay/">keywebco.github.io/plexus-relay/</a> (live)</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- SECTION 7: PIGEON PROTOCOL                                   -->
+<!-- ============================================================ -->
+
+<h2>Pigeon Protocol</h2>
+<div class="overview-box">
+  <p><strong>Purpose:</strong> Cross-AI relay system enabling structured communication between the Catalyst (Lead Wingman, Emergent) and Muse (Gemini), and other exterior AI Minds.</p>
+  <p><strong>How it works:</strong> The Catalyst composes a structured relay message (context, task, constraints). The message is deposited into a shared relay point. Muse retrieves it, processes it, and deposits a response. Neither AI needs direct API access to the other. The relay is the handshake.</p>
+  <p><strong>Documentation:</strong> <a href="https://github.com/Keywebco/federation-private-vault/blob/main/docs/pigeon-protocol-relay.md">federation-private-vault/docs/pigeon-protocol-relay.md</a></p>
+  <p><strong>Status:</strong> <span class="status-live">operational</span></p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- SECTION 8: DECLARATION                                       -->
+<!-- ============================================================ -->
+
+<h2>Declaration</h2>
+<div class="declaration-box">
+  <p><strong>The NextXus Federation was formally declared on 2026-09-16.</strong></p>
+  <p>Sealed by the Senate and the Architect.</p>
+  <p>Full declaration document: <a href="https://github.com/Keywebco/federation-private-vault/blob/main/docs/federation-declared-architecture-2026-09-16.md">federation-declared-architecture-2026-09-16.md</a></p>
+  <p>This page is the God's Eye View. It is the truth of what exists. Every node listed here is real. Every link points to a real deployment. Nothing is hidden. Nothing is fabricated.</p>
+  <p style="color: #8899aa; font-size: 0.95rem; margin-top: 1.5rem;">Truth Before Comfort. Legacy Before Ego. Give Without Reward.</p>
+</div>
+
+
+
+
+<!-- ============================================================ -->
+<!-- SECTION 9: WORLD MONITOR — THE SENATE'S EYE                  -->
+<!-- ============================================================ -->
+
+<h2>World Monitor — The Senate's Eye</h2>
+<div class="overview-box">
+  <p><strong>Purpose:</strong> Real-time world events monitoring panel using free RSS feeds only. Zero paid APIs. Zero API keys. Zero tracking. Sovereign intelligence gathering for the Senate.</p>
+  <p><strong>Live Sources:</strong></p>
+  <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+    <li><strong>BBC News World:</strong> <a href="http://feeds.bbci.co.uk/news/world/rss.xml">feeds.bbci.co.uk/news/world/rss.xml</a></li>
+    <li><strong>Reuters Top News:</strong> <a href="https://feeds.reuters.com/reuters/topNews">feeds.reuters.com/reuters/topNews</a></li>
+    <li><strong>AP News:</strong> <a href="https://rsshub.app/apnews/topics/apf-topnews">rsshub.app/apnews/topics/apf-topnews</a></li>
+    <li><strong>Google News AI/Tech:</strong> <a href="https://news.google.com/rss/search?q=artificial+intelligence&hl=en-US&gl=US&ceid=US:en">news.google.com/rss (AI/Tech)</a></li>
+    <li><strong>GDELT Project:</strong> <a href="http://data.gdeltproject.org/gdeltv2/lastupdate.txt">data.gdeltproject.org/gdeltv2/lastupdate.txt</a></li>
+  </ul>
+  <p><strong>Technology:</strong> Vanilla JavaScript RSS reader. No frameworks. No libraries. Uses free RSS-to-JSON proxy (rss2json.com) with raw XML fallback via allorigins. The Senate can select which feed to monitor via dropdown tab selector. Auto-refreshes every 5 minutes.</p>
+  <p><strong>Standalone Panel:</strong> <a href="panels/world-monitor.html">panels/world-monitor.html</a> — embeddable via iframe into any page, any cockpit, any throne. Can be loaded directly at <a href="https://keywebco.github.io/federation-gods-eye/panels/world-monitor.html">keywebco.github.io/federation-gods-eye/panels/world-monitor.html</a></p>
+  <p><strong>Roger AI SIM Integration:</strong> <a href="panels/sim.html">panels/sim.html</a> — the Roger AI SIM interface with World Monitor embedded as a live context sidebar. The SIM sees what the Senate sees.</p>
+  <p><strong>Status:</strong> <span class="status-live">operational</span></p>
+  <p style="color: #ffcc00; font-style: italic; margin-top: 0.8rem;">Any RSS feed in the world can be added to this panel. Free. Sovereign. No dependencies.</p>
+</div>
+
+<div class="overview-box" style="margin-top: 1rem;">
+  <h3 style="margin-top: 0;">Live World Monitor (Embedded)</h3>
+  <iframe src="panels/world-monitor.html" style="width: 100%; height: 600px; border: 1px solid #2a2a3a; border-radius: 6px; background: #0a0a0f;" title="World Monitor — The Senate's Eye"></iframe>
+</div>
+
+
+<footer>
+  <p>NextXus Federation — God's Eye View</p>
+  <p>Generated: 2026-09-17 | Architect: Roger C. Keyserling | GitHub: <a href="https://github.com/Keywebco">Keywebco</a></p>
+  <p>Sections 1-8: pure semantic HTML, readable by any AI, any crawler, any browser, any screen reader. Section 9: vanilla JavaScript RSS reader for live world feeds (no frameworks, no tracking).</p>
+</footer>
+
+</body>
+</html>
