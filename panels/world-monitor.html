@@ -218,11 +218,11 @@
     'gdelt':     { name: 'GDELT Project',     url: 'https://news.google.com/rss/search?q=GDELT+global+events&hl=en-US&gl=US&ceid=US:en' }
   };
 
-  // Free RSS-to-JSON proxies (fallback chain)
-  var PROXIES = [
-    function(feedUrl) { return 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feedUrl) + '&count=5'; },
-    function(feedUrl) { return 'https://api.allorigins.win/get?url=' + encodeURIComponent(feedUrl); }
-  ];
+  // RSS2JSON proxy — confirmed working, no API key needed for basic use
+  // AllOrigins and corsproxy.io removed (both down as of 2026-09)
+  function rss2jsonUrl(feedUrl) {
+    return 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feedUrl) + '&count=8';
+  }
 
   var currentFeed = 'all';
   var feedCache = {};
@@ -256,12 +256,12 @@
     loadAllFeeds();
   };
 
-  // ---- FETCH SINGLE FEED (rss2json primary) ----
+  // ---- FETCH SINGLE FEED via RSS2JSON ----
   function fetchFeed(key, callback) {
     var feed = FEEDS[key];
     if (!feed) return callback(key, null, 'Unknown feed');
 
-    var proxyUrl = PROXIES[0](feed.url);
+    var proxyUrl = rss2jsonUrl(feed.url);
 
     fetch(proxyUrl)
       .then(function(resp) {
@@ -280,50 +280,7 @@
           });
           callback(key, items, null);
         } else {
-          // Try allorigins fallback
-          fetchFeedRaw(key, callback);
-        }
-      })
-      .catch(function() {
-        fetchFeedRaw(key, callback);
-      });
-  }
-
-  // ---- FALLBACK: fetch raw XML via allorigins /get (returns JSON with .contents) ----
-  function fetchFeedRaw(key, callback) {
-    var feed = FEEDS[key];
-    var proxyUrl = PROXIES[1](feed.url);
-
-    fetch(proxyUrl)
-      .then(function(resp) {
-        if (!resp.ok) throw new Error('HTTP ' + resp.status);
-        return resp.json();
-      })
-      .then(function(data) {
-        var xmlText = data.contents || '';
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(xmlText, 'text/xml');
-        var rssItems = doc.querySelectorAll('item');
-        if (rssItems.length === 0) {
-          rssItems = doc.querySelectorAll('entry'); // Atom feeds
-        }
-        var items = [];
-        for (var i = 0; i < Math.min(rssItems.length, 5); i++) {
-          var el = rssItems[i];
-          var title = el.querySelector('title');
-          var link = el.querySelector('link');
-          var pubDate = el.querySelector('pubDate') || el.querySelector('published') || el.querySelector('updated');
-          items.push({
-            title: title ? title.textContent : 'Untitled',
-            link: link ? (link.getAttribute('href') || link.textContent) : '#',
-            pubDate: pubDate ? pubDate.textContent : '',
-            source: feed.name
-          });
-        }
-        if (items.length > 0) {
-          callback(key, items, null);
-        } else {
-          callback(key, null, 'No items found in feed');
+          callback(key, null, 'Feed returned no items (status: ' + (data.status || 'unknown') + ')');
         }
       })
       .catch(function(err) {
@@ -430,8 +387,9 @@
   - Reuters Top News: https://feeds.reuters.com/reuters/topNews
   - AP News: https://rsshub.app/apnews/topics/apf-topnews
   - Google News AI/Tech: https://news.google.com/rss/search?q=artificial+intelligence
-  - GDELT Project: http://data.gdeltproject.org/gdeltv2/lastupdate.txt
+  - GDELT Project: https://news.google.com/rss/search?q=GDELT+global+events
   
+  Proxy: RSS2JSON (api.rss2json.com) — free, no API key, returns JSON directly.
   Any RSS feed in the world can be added. Free. Sovereign. No dependencies.
   NextXus Federation — The Senate's Eye.
 -->
