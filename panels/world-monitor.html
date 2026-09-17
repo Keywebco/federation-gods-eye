@@ -221,7 +221,7 @@
   // RSS2JSON proxy — confirmed working, no API key needed for basic use
   // AllOrigins and corsproxy.io removed (both down as of 2026-09)
   function rss2jsonUrl(feedUrl) {
-    return 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feedUrl) + '&count=8';
+    return 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feedUrl) ;
   }
 
   var currentFeed = 'all';
