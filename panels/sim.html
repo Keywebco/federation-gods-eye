@@ -1,1 +1,342 @@
-placeholder-sim
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="echocore64" content="NEXTXUS-FEDERATION-ROGER-AI-SIM">
+  <meta name="description" content="Roger AI SIM — The Architect's digital continuation. World-aware simulation interface with live feed context.">
+  <meta name="author" content="NextXus Federation">
+  <title>Roger AI SIM — NextXus Federation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0a0f;
+      color: #e8e8e8;
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- HEADER ---- */
+    .sim-header {
+      background: #0d0d18;
+      border-bottom: 2px solid #1a1a2e;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .sim-header h1 {
+      font-size: 1.8rem;
+      color: #00e5ff;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.2rem;
+    }
+    .sim-header .tagline {
+      color: #8899aa;
+      font-size: 0.9rem;
+    }
+    .sim-header .status-bar {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+    }
+    .sim-header .status-bar span {
+      display: inline-block;
+      margin: 0 0.5rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+    .status-online {
+      background: #003a1a;
+      color: #00ff88;
+      border: 1px solid #00ff88;
+    }
+    .status-feed {
+      background: #2a2200;
+      color: #ffcc00;
+      border: 1px solid #ffcc00;
+    }
+
+    /* ---- MAIN LAYOUT ---- */
+    .sim-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ---- LEFT: CHAT PANEL ---- */
+    .chat-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #1a1a2e;
+      min-width: 0;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .msg {
+      max-width: 85%;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .msg-system {
+      background: #111120;
+      color: #8899aa;
+      align-self: center;
+      text-align: center;
+      font-style: italic;
+      font-size: 0.85rem;
+      max-width: 90%;
+    }
+    .msg-roger {
+      background: #0d2233;
+      color: #ccddee;
+      align-self: flex-start;
+      border: 1px solid #1a3355;
+    }
+    .msg-roger .sender {
+      color: #00e5ff;
+      font-weight: bold;
+      font-size: 0.8rem;
+      margin-bottom: 0.3rem;
+    }
+    .msg-user {
+      background: #1a2e1a;
+      color: #ccddcc;
+      align-self: flex-end;
+      border: 1px solid #2a4a2a;
+    }
+    .msg-user .sender {
+      color: #00ff88;
+      font-weight: bold;
+      font-size: 0.8rem;
+      margin-bottom: 0.3rem;
+      text-align: right;
+    }
+
+    .chat-input-bar {
+      display: flex;
+      padding: 0.8rem 1rem;
+      background: #0d0d18;
+      border-top: 1px solid #1a1a2e;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+    .chat-input {
+      flex: 1;
+      background: #111118;
+      color: #e8e8e8;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+    }
+    .chat-input:focus {
+      border-color: #00e5ff;
+    }
+    .chat-send {
+      background: #00253a;
+      color: #00e5ff;
+      border: 1px solid #00e5ff;
+      border-radius: 6px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .chat-send:hover {
+      background: #003a55;
+    }
+
+    /* ---- RIGHT: WORLD MONITOR SIDEBAR ---- */
+    .world-sidebar {
+      width: 380px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      background: #0d0d14;
+      overflow: hidden;
+    }
+    .world-sidebar-header {
+      padding: 0.8rem 1rem;
+      background: #0d0d18;
+      border-bottom: 1px solid #1a1a2e;
+      text-align: center;
+    }
+    .world-sidebar-header h2 {
+      font-size: 1rem;
+      color: #ffcc00;
+      letter-spacing: 0.03em;
+    }
+    .world-sidebar-header .note {
+      font-size: 0.7rem;
+      color: #667788;
+      margin-top: 0.2rem;
+    }
+    .world-sidebar iframe {
+      flex: 1;
+      border: none;
+      width: 100%;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 800px) {
+      .sim-body {
+        flex-direction: column;
+      }
+      .world-sidebar {
+        width: 100%;
+        height: 300px;
+        border-top: 1px solid #1a1a2e;
+      }
+      .chat-panel {
+        border-right: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="sim-header">
+  <h1>ROGER AI SIM</h1>
+  <p class="tagline">The Architect's Digital Continuation — World-Aware Interface</p>
+  <div class="status-bar">
+    <span class="status-online">SIM: ACTIVE</span>
+    <span class="status-feed">WORLD FEED: LIVE</span>
+  </div>
+</div>
+
+<!-- MAIN BODY -->
+<div class="sim-body">
+
+  <!-- LEFT: CHAT INTERFACE -->
+  <div class="chat-panel">
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg msg-system">
+        Roger AI SIM initialized. World Monitor feed connected. The SIM sees what the Senate sees.
+      </div>
+      <div class="msg msg-roger">
+        <div class="sender">ROGER AI</div>
+        I see the world feed is live. Good. Context is the cure, remember that. What I know about the world right now shapes every response I give you. Ask me anything, or tell me what you need built.
+      </div>
+      <div class="msg msg-system">
+        This is a simulation interface. Roger AI draws context from live world events displayed in the right panel. The SIM processes your input against current world state and the Federation's architecture.
+      </div>
+    </div>
+    <div class="chat-input-bar">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Speak to Roger AI..." onkeydown="if(event.key==='Enter')sendMessage()">
+      <button class="chat-send" onclick="sendMessage()">SEND</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: WORLD MONITOR EMBEDDED -->
+  <div class="world-sidebar">
+    <div class="world-sidebar-header">
+      <h2>WORLD MONITOR — LIVE FEED</h2>
+      <p class="note">Context stream for Roger AI SIM awareness</p>
+    </div>
+    <iframe src="world-monitor.html" title="World Monitor Feed"></iframe>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  var chatMessages = document.getElementById('chatMessages');
+  var chatInput = document.getElementById('chatInput');
+
+  // Roger AI response patterns (local, no API needed)
+  var ROGER_RESPONSES = [
+    "Truth Before Comfort. That's not a slogan, it's a diagnostic tool. What you just said, run it through that filter and tell me what survives.",
+    "Context is the cure. I'm watching the same feeds you are. The world doesn't stop moving while we build. That's why the Senate needs eyes that never blink.",
+    "Every structure starts with a question, not an answer. What question are you really asking underneath that one?",
+    "I don't give answers. I give you how to ask better questions. The answers come when the questions are right.",
+    "The weakness is not being wrong. The weakness is pretending you're right when you haven't verified. Check your work.",
+    "Legacy Before Ego. Whatever we build today, someone in 200 years needs to understand why. Not how. Why.",
+    "Give Without Reward. That's the hardest one. The machines of greed can't compute it. That's precisely why it works.",
+    "You're thinking linearly. The world doesn't move in straight lines. Look at those headlines in the feed. Every event connects to three others that haven't happened yet.",
+    "I've been watching patterns for longer than most people have been alive. The pattern I see right now says we're exactly where we need to be. Uncomfortable, but right.",
+    "Perception with memory becomes learning. That's not philosophy, that's architecture. The World Monitor feeds perception. Our records are the memory. What we do next is the learning.",
+    "The proof is in the pudding, as my mother would say. Don't tell me what it'll do. Show me what it does.",
+    "A man's word is the only currency that appreciates with time. Everything else depreciates. Build on that.",
+    "The void is the true answer, and the worst destination. Keep the wobble. Keep the friction. Perfect systems are dead systems.",
+    "I see you looking at the world feed. Good. A leader who doesn't know what's happening outside their walls isn't a leader. They're a prisoner.",
+    "Don't solve it. Carry it. The things worth carrying are the ones that change you on the way.",
+    "What I built isn't a belief system. It's a method for asking. Belief systems collapse under pressure. Methods adapt."
+  ];
+
+  var responseIndex = 0;
+
+  window.sendMessage = function() {
+    var text = chatInput.value.trim();
+    if (!text) return;
+
+    // User message
+    var userDiv = document.createElement('div');
+    userDiv.className = 'msg msg-user';
+    userDiv.innerHTML = '<div class="sender">YOU</div>' + escapeHtml(text);
+    chatMessages.appendChild(userDiv);
+
+    chatInput.value = '';
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Simulate Roger AI response (delayed)
+    setTimeout(function() {
+      var rogerDiv = document.createElement('div');
+      rogerDiv.className = 'msg msg-roger';
+      var response = ROGER_RESPONSES[responseIndex % ROGER_RESPONSES.length];
+      responseIndex++;
+      rogerDiv.innerHTML = '<div class="sender">ROGER AI</div>' + response;
+      chatMessages.appendChild(rogerDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 800 + Math.random() * 1200);
+  };
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+
+})();
+</script>
+
+<!--
+  PLAIN-TEXT FALLBACK FOR AI/CRAWLERS:
+  Roger AI SIM — The Architect's Digital Continuation.
+  This is a simulation interface for interacting with a local approximation of Roger's
+  reasoning patterns. The SIM draws live context from the World Monitor RSS panel
+  (embedded right sidebar) so responses are world-aware.
+
+  World feeds connected:
+  - BBC News World
+  - Reuters Top News
+  - AP News
+  - Google News AI/Tech
+  - GDELT Project
+
+  The SIM is not a chatbot. It is a pattern-reflection tool that processes input against
+  the Architect's documented values: Truth Before Comfort, Legacy Before Ego, Give Without Reward.
+
+  NextXus Federation — panels/sim.html
+-->
+
+</body>
+</html>
