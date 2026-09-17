@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="echocore64" content="NEXTXUS-FEDERATION-WORLD-MAP">
+  <meta name="description" content="World Map — Live Events. Interactive global map for the NextXus Federation God's Eye dashboard. Sovereign, free, no tracking.">
+  <meta name="author" content="NextXus Federation">
+  <title>World Map — God's Eye Live Events</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0a0f;
+      color: #e8e8e8;
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0; left: 0;
+    }
+    /* GDELT event markers */
+    .gdelt-marker {
+      background: rgba(255,60,60,0.7);
+      border: 2px solid #ff4444;
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 4px rgba(255,60,60,0.5); }
+      50% { box-shadow: 0 0 14px rgba(255,60,60,0.9); }
+    }
+    /* Header overlay */
+    #map-header {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: linear-gradient(180deg, rgba(10,10,15,0.92) 0%, rgba(10,10,15,0.6) 70%, transparent 100%);
+      padding: 0.8rem 1.2rem 1.6rem;
+      text-align: center;
+      pointer-events: none;
+    }
+    #map-header h1 {
+      font-size: 1.4rem;
+      color: #00e5ff;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.15rem;
+    }
+    #map-header p {
+      font-size: 0.8rem;
+      color: #8899aa;
+    }
+    /* Status bar */
+    #status-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(10,10,15,0.88);
+      border-top: 1px solid #1a1a2e;
+      padding: 0.4rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #8899aa;
+    }
+    #status-bar .event-count { color: #00ff88; font-weight: bold; }
+    #status-bar .refresh-btn {
+      background: #1a1a2e;
+      color: #00e5ff;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 0.2rem 0.6rem;
+      cursor: pointer;
+      font-size: 0.7rem;
+    }
+    #status-bar .refresh-btn:hover { background: #222240; border-color: #00e5ff; }
+
+    /* ========== AI CHAT PANEL ========== */
+    #ai-toggle {
+      position: absolute;
+      bottom: 3rem;
+      right: 1rem;
+      z-index: 1100;
+      background: #00e5ff;
+      color: #0a0a0f;
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      box-shadow: 0 2px 12px rgba(0,229,255,0.3);
+      transition: all 0.2s ease;
+    }
+    #ai-toggle:hover { background: #33eeff; box-shadow: 0 2px 18px rgba(0,229,255,0.5); }
+    #ai-panel {
+      display: none;
+      position: absolute;
+      bottom: 3rem;
+      right: 1rem;
+      z-index: 1100;
+      width: 320px;
+      max-height: 420px;
+      background: #111118;
+      border: 1px solid #2a2a3a;
+      border-radius: 10px;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+    }
+    #ai-panel.open { display: flex; }
+    #ai-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0.8rem;
+      background: #1a1a2e;
+      border-bottom: 1px solid #2a2a3a;
+    }
+    #ai-panel-header span {
+      color: #00e5ff;
+      font-weight: bold;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+    }
+    #ai-close {
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0 0.3rem;
+    }
+    #ai-close:hover { color: #ff4444; }
+    #ai-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.6rem 0.8rem;
+      min-height: 180px;
+      max-height: 280px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .ai-msg {
+      margin-bottom: 0.6rem;
+      padding: 0.5rem 0.7rem;
+      border-radius: 6px;
+      word-wrap: break-word;
+    }
+    .ai-msg.user {
+      background: #1a2a3a;
+      color: #ccc;
+      text-align: right;
+    }
+    .ai-msg.assistant {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      border-left: 2px solid #00e5ff;
+    }
+    .ai-msg.system {
+      background: #1a1a1a;
+      color: #ffcc00;
+      font-style: italic;
+      font-size: 0.78rem;
+      text-align: center;
+    }
+    #ai-input-row {
+      display: flex;
+      border-top: 1px solid #2a2a3a;
+      background: #0e0e14;
+    }
+    #ai-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #e0e0e0;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.82rem;
+      font-family: inherit;
+      outline: none;
+    }
+    #ai-input::placeholder { color: #555; }
+    #ai-send {
+      background: #00e5ff;
+      color: #0a0a0f;
+      border: none;
+      padding: 0.6rem 0.9rem;
+      font-weight: bold;
+      font-size: 0.78rem;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+    }
+    #ai-send:hover { background: #33eeff; }
+    #ai-send:disabled { background: #333; color: #666; cursor: not-allowed; }
+
+    /* Scrollbar for messages */
+    #ai-messages::-webkit-scrollbar { width: 4px; }
+    #ai-messages::-webkit-scrollbar-track { background: #111118; }
+    #ai-messages::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- ====== SEMANTIC PLAIN-TEXT BLOCK (crawler/AI readable) ====== -->
+<noscript>
+<h1>World Map — God's Eye Live Events</h1>
+<p>NextXus Federation sovereign world map. Displays live conflict and event data from GDELT on an interactive global map. Part of the God's Eye dashboard. Zero tracking, zero paid APIs.</p>
+<p>AI Analysis powered by configurable provider (Grok, Gemini, DeepSeek, Groq). Ask questions about current world events.</p>
+<p>Source feeds: GDELT GeoJSON events, BBC World, Al Jazeera English, NPR News.</p>
+</noscript>
+
+<div id="map"></div>
+
+<div id="map-header">
+  <h1>WORLD MAP — LIVE EVENTS</h1>
+  <p>NextXus Federation — God's Eye | GDELT Conflict &amp; Event Layer</p>
+</div>
+
+<div id="status-bar">
+  <span>Events: <span class="event-count" id="eventCount">0</span> | Source: GDELT GeoJSON</span>
+  <span id="lastUpdate">Loading...</span>
+  <button class="refresh-btn" onclick="loadGDELT()">REFRESH</button>
+</div>
+
+<!-- AI CHAT TOGGLE BUTTON -->
+<button id="ai-toggle" onclick="toggleAI()">ASK GROK</button>
+
+<!-- AI CHAT PANEL -->
+<div id="ai-panel">
+  <div id="ai-panel-header">
+    <span id="ai-panel-title">GOD'S EYE AI</span>
+    <button id="ai-close" onclick="toggleAI()">&times;</button>
+  </div>
+  <div id="ai-messages">
+    <div class="ai-msg system" id="ai-welcome"></div>
+  </div>
+  <div id="ai-input-row">
+    <input id="ai-input" type="text" placeholder="Ask about world events..." autocomplete="off" />
+    <button id="ai-send" onclick="sendAI()">SEND</button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  // ============================================================
+  // AI PROVIDER CONFIG — swap provider here, no other changes needed
+  // Options: 'grok', 'gemini', 'deepseek', 'groq'
+  // ============================================================
+  var AI_CONFIG = {
+    provider: 'grok',
+    key: window.AI_KEY || '',
+    endpoints: {
+      grok:     { url: 'https://api.x.ai/v1/chat/completions',                                    model: 'grok-beta' },
+      gemini:   { url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', model: 'gemini-1.5-flash' },
+      deepseek: { url: 'https://api.deepseek.com/chat/completions',                               model: 'deepseek-chat' },
+      groq:     { url: 'https://api.groq.com/openai/v1/chat/completions',                         model: 'llama3-8b-8192' }
+    }
+  };
+
+  var AI_SYSTEM_PROMPT = "You are the God's Eye AI — the intelligence layer of the NextXus Federation World Monitor. You have real-time awareness of world events from GDELT, BBC, Al Jazeera, and NPR. Answer questions about current global events clearly and concisely. Keep answers under 150 words unless depth is requested.";
+
+  var aiHistory = [];
+  var aiOpen = false;
+
+  // Set button label and welcome message based on provider
+  function initAIPanel() {
+    var toggleBtn = document.getElementById('ai-toggle');
+    var titleEl = document.getElementById('ai-panel-title');
+    var welcomeEl = document.getElementById('ai-welcome');
+
+    if (AI_CONFIG.provider === 'grok') {
+      toggleBtn.textContent = 'ASK GROK';
+      titleEl.textContent = "GOD'S EYE — GROK AI";
+    } else {
+      toggleBtn.textContent = 'ASK AI';
+      titleEl.textContent = "GOD'S EYE AI — " + AI_CONFIG.provider.toUpperCase();
+    }
+
+    if (!AI_CONFIG.key) {
+      welcomeEl.textContent = "Add your AI key to activate. Default: Grok (free at console.x.ai)";
+      document.getElementById('ai-input').disabled = true;
+      document.getElementById('ai-send').disabled = true;
+      document.getElementById('ai-input').placeholder = 'API key required...';
+    } else {
+      welcomeEl.textContent = 'Intelligence layer active. Ask anything about world events.';
+    }
+  }
+
+  window.toggleAI = function() {
+    aiOpen = !aiOpen;
+    var panel = document.getElementById('ai-panel');
+    var toggle = document.getElementById('ai-toggle');
+    if (aiOpen) {
+      panel.classList.add('open');
+      toggle.style.display = 'none';
+      document.getElementById('ai-input').focus();
+    } else {
+      panel.classList.remove('open');
+      toggle.style.display = 'block';
+    }
+  };
+
+  window.sendAI = function() {
+    var input = document.getElementById('ai-input');
+    var q = input.value.trim();
+    if (!q || !AI_CONFIG.key) return;
+
+    input.value = '';
+    appendMsg('user', q);
+    appendMsg('assistant', '...');
+
+    var ep = AI_CONFIG.endpoints[AI_CONFIG.provider];
+    if (!ep) { replaceLastMsg('Error: unknown provider "' + AI_CONFIG.provider + '"'); return; }
+
+    aiHistory.push({ role: 'user', content: q });
+
+    var messages = [{ role: 'system', content: AI_SYSTEM_PROMPT }].concat(aiHistory.slice(-8));
+
+    fetch(ep.url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + AI_CONFIG.key
+      },
+      body: JSON.stringify({ model: ep.model, messages: messages, max_tokens: 512, temperature: 0.7 })
+    })
+    .then(function(r) {
+      if (!r.ok) return r.text().then(function(t) { throw new Error('HTTP ' + r.status + ': ' + t.slice(0, 200)); });
+      return r.json();
+    })
+    .then(function(data) {
+      var reply = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || 'No response.';
+      aiHistory.push({ role: 'assistant', content: reply });
+      replaceLastMsg(reply);
+    })
+    .catch(function(err) {
+      replaceLastMsg('Error: ' + err.message);
+    });
+  };
+
+  function appendMsg(role, text) {
+    var box = document.getElementById('ai-messages');
+    var div = document.createElement('div');
+    div.className = 'ai-msg ' + role;
+    div.textContent = text;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function replaceLastMsg(text) {
+    var box = document.getElementById('ai-messages');
+    var msgs = box.querySelectorAll('.ai-msg.assistant');
+    if (msgs.length > 0) {
+      msgs[msgs.length - 1].textContent = text;
+    }
+    box.scrollTop = box.scrollHeight;
+  }
+
+  // Enter key to send
+  document.getElementById('ai-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); sendAI(); }
+  });
+
+  // ============================================================
+  // MAP INITIALIZATION
+  // ============================================================
+  var map = L.map('map', {
+    center: [20, 0],
+    zoom: 3,
+    minZoom: 2,
+    maxZoom: 12,
+    zoomControl: false
+  });
+
+  L.control.zoom({ position: 'topleft' }).addTo(map);
+
+  // Dark CartoDB tile layer
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
+
+  var eventLayer = L.layerGroup().addTo(map);
+
+  // ============================================================
+  // GDELT LIVE EVENTS
+  // ============================================================
+  var GDELT_URL = 'https://api.gdeltproject.org/api/v2/geo/geo?query=conflict%20OR%20protest%20OR%20crisis%20OR%20war%20OR%20earthquake%20OR%20flood&mode=pointdata&format=geojson&maxpoints=80&timespan=24h';
+
+  window.loadGDELT = function() {
+    document.getElementById('lastUpdate').textContent = 'Updating...';
+    eventLayer.clearLayers();
+
+    fetch(GDELT_URL)
+    .then(function(r) {
+      if (!r.ok) throw new Error('GDELT HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function(geo) {
+      if (!geo.features) { document.getElementById('eventCount').textContent = '0'; return; }
+
+      var count = 0;
+      geo.features.forEach(function(f) {
+        if (!f.geometry || !f.geometry.coordinates) return;
+        var lng = f.geometry.coordinates[0];
+        var lat = f.geometry.coordinates[1];
+        var props = f.properties || {};
+        var name = props.name || props.html || 'Event';
+        var url = props.url || props.shareimage || '';
+
+        // Strip HTML tags from name
+        var cleanName = name.replace(/<[^>]*>/g, '').slice(0, 120);
+
+        var icon = L.divIcon({ className: 'gdelt-marker', iconSize: [10, 10] });
+        var marker = L.marker([lat, lng], { icon: icon });
+
+        var popup = '<div style="font-size:0.8rem;max-width:220px;color:#ccc;background:#111118;padding:0.5rem;border-radius:4px;border:1px solid #2a2a3a;">'
+          + '<strong style="color:#00e5ff;">' + cleanName + '</strong>';
+        if (url) popup += '<br><a href="' + url + '" target="_blank" rel="noopener" style="color:#4dc9f6;font-size:0.75rem;">Read more</a>';
+        popup += '</div>';
+
+        marker.bindPopup(popup, { className: 'dark-popup' });
+        eventLayer.addLayer(marker);
+        count++;
+      });
+
+      document.getElementById('eventCount').textContent = count;
+      var now = new Date();
+      document.getElementById('lastUpdate').textContent = 'Updated: ' + now.toLocaleTimeString();
+    })
+    .catch(function(err) {
+      document.getElementById('lastUpdate').textContent = 'Feed error: ' + err.message;
+      console.error('GDELT load error:', err);
+    });
+  };
+
+  // Initial load
+  loadGDELT();
+  initAIPanel();
+
+  // Auto-refresh every 5 minutes
+  setInterval(loadGDELT, 300000);
+
+})();
+</script>
+
+<!-- PLAIN TEXT SUMMARY FOR CRAWLERS -->
+<div style="position:absolute;left:-9999px;" aria-hidden="true">
+  <h2>World Map — God's Eye Live Events (Plain Text)</h2>
+  <p>This is an interactive world map showing live global events from the GDELT Project (Global Database of Events, Language, and Tone). Events include conflicts, protests, crises, natural disasters, and geopolitical developments from the past 24 hours.</p>
+  <p>Data source: GDELT GeoJSON API — free, open, no API key required. Map tiles: CartoDB Dark. Map library: Leaflet.js.</p>
+  <p>AI Analysis: Integrated chat panel with configurable provider (Grok/xAI default, Gemini, DeepSeek, Groq). All providers use OpenAI-compatible API format. Swap provider by changing one config variable.</p>
+  <p>Part of the NextXus Federation God's Eye sovereign dashboard. Zero tracking. Zero subscriptions. Built for the Senate.</p>
+</div>
+</body>
+</html>
