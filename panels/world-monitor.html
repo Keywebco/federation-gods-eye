@@ -4,25 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="echocore64" content="NEXTXUS-FEDERATION-WORLD-MONITOR">
-  <meta name="description" content="World Monitor — The Senate's Eye. Live RSS feed panel for the NextXus Federation. Sovereign, free, no dependencies.">
+  <meta name="description" content="World Monitor: live world headlines from BBC World, Al Jazeera, NPR, Google News AI and GDACS disaster alerts, for the NextXus Federation God's Eye. Free, no tracking.">
+  <link rel="canonical" href="https://keywebco.github.io/federation-gods-eye/panels/world-monitor.html">
   <meta name="author" content="NextXus Federation">
-  <title>World Monitor — The Senate's Eye</title>
+  <title>World Monitor: Live World Headlines | God's Eye</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: #0a0a0f;
       color: #e8e8e8;
-      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      font-family: system-ui, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 18px;
       line-height: 1.6;
       padding: 1.5rem;
       max-width: 960px;
       margin: 0 auto;
     }
     h1 { font-size: 2rem; color: #00e5ff; text-align: center; margin-bottom: 0.3rem; letter-spacing: 0.04em; }
-    .subtitle { text-align: center; color: #8899aa; font-size: 0.95rem; margin-bottom: 0.5rem; }
-    .sovereign-note { text-align: center; color: #ffcc00; font-size: 0.85rem; font-style: italic; margin-bottom: 1.5rem; padding: 0.6rem; border: 1px solid #333; border-radius: 6px; background: #111118; }
+    .subtitle { text-align: center; color: #e0e0e0; font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .sovereign-note { text-align: center; color: #ffe27a; font-size: 1rem; margin-bottom: 1.5rem; padding: 0.6rem; border: 1px solid #333; border-radius: 6px; background: #111118; }
     .feed-selector { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.5rem; }
-    .feed-btn { background: #1a1a2e; color: #ccc; border: 1px solid #333; border-radius: 6px; padding: 0.5rem 1rem; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+    .feed-btn { background: #1a1a2e; color: #ffffff; border: 2px solid #44506a; border-radius: 8px; padding: 0.6rem 1rem; min-height: 48px; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
     .feed-btn:hover { background: #222240; color: #00e5ff; border-color: #00e5ff; }
     .feed-btn.active { background: #00253a; color: #00e5ff; border-color: #00e5ff; font-weight: bold; }
     .feed-btn-all { background: #1a2e1a; color: #00ff88; border: 1px solid #00ff88; }
@@ -30,25 +32,32 @@
     .feed-panel { background: #111118; border: 1px solid #2a2a3a; border-radius: 8px; padding: 1.2rem 1.5rem; margin-bottom: 1rem; min-height: 200px; }
     .feed-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .feed-source-label { font-size: 1.1rem; color: #ffcc00; font-weight: bold; }
-    .feed-status { font-size: 0.8rem; color: #8899aa; }
+    .feed-status { font-size: 1rem; color: #e0e0e0; }
     .feed-item { border-bottom: 1px solid #1a1a2e; padding: 0.7rem 0; }
     .feed-item:last-child { border-bottom: none; }
-    .feed-item a { color: #4dc9f6; text-decoration: none; font-size: 1rem; font-weight: 500; display: block; margin-bottom: 0.2rem; }
+    .feed-item a { color: #7fe9ff; text-decoration: none; font-size: 1.1rem; font-weight: 500; display: block; margin-bottom: 0.2rem; }
     .feed-item a:hover { color: #00e5ff; text-decoration: underline; }
-    .feed-item .meta { font-size: 0.8rem; color: #667788; }
-    .loading { color: #8899aa; text-align: center; padding: 2rem; font-style: italic; }
-    .error-msg { color: #ff6666; text-align: center; padding: 1rem; font-size: 0.9rem; }
+    .feed-item .meta { font-size: 0.95rem; color: #c8c8c8; }
+    .loading { color: #e0e0e0; text-align: center; padding: 2rem; font-style: italic; }
+    .error-msg { color: #ffb3b3; text-align: center; padding: 1rem; font-size: 1rem; }
     .refresh-bar { text-align: center; margin-top: 1rem; }
-    .refresh-btn { background: #1a1a2e; color: #00e5ff; border: 1px solid #00e5ff; border-radius: 6px; padding: 0.4rem 1.2rem; font-size: 0.85rem; cursor: pointer; }
+    .refresh-btn { background: #1a1a2e; color: #ffffff; border: 2px solid #00e5ff; border-radius: 8px; padding: 0.6rem 1.4rem; min-height: 48px; font-size: 1.05rem; font-weight: 700; cursor: pointer; }
     .refresh-btn:hover { background: #00253a; }
-    .last-refresh { color: #667788; font-size: 0.75rem; margin-top: 0.4rem; }
-    footer { text-align: center; color: #555; font-size: 0.75rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #222; }
+    .last-refresh { color: #c8c8c8; font-size: 0.95rem; margin-top: 0.4rem; }
+    footer { text-align: center; color: #c8c8c8; font-size: 0.95rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #222; }
+    #feedContainer { min-height: 60vh; }
+    .sources { background: #111118; border: 1px solid #2a2a3a; border-radius: 8px; padding: 1rem 1.5rem; margin-top: 1.5rem; }
+    .sources h2 { font-size: 1.4rem; color: #ffffff; margin-bottom: .5rem; }
+    .sources li { margin: 0 0 .4rem 1.2rem; }
+    .sources a { color: #7fe9ff; }
+    button:focus-visible, a:focus-visible { outline: 4px solid #ffffff; outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
     @media (max-width: 600px) { body { padding: 0.8rem; } h1 { font-size: 1.5rem; } }
   </style>
 </head>
 <body>
 <h1>WORLD MONITOR</h1>
-<p class="subtitle">THE SENATE'S EYE</p>
+<p class="subtitle">Live world headlines, refreshed every five minutes</p>
 <div class="sovereign-note">Any RSS feed in the world can be added to this panel. Free. Sovereign. No dependencies.</div>
 <div class="feed-selector" id="feedSelector">
   <button class="feed-btn feed-btn-all active" onclick="selectFeed('all')">ALL FEEDS</button>
@@ -56,16 +65,27 @@
   <button class="feed-btn" onclick="selectFeed('aljazeera')">Al Jazeera</button>
   <button class="feed-btn" onclick="selectFeed('npr')">NPR</button>
   <button class="feed-btn" onclick="selectFeed('google-ai')">AI / Tech</button>
-  <button class="feed-btn" onclick="selectFeed('gdelt')">GDELT</button>
+  <button class="feed-btn" onclick="selectFeed('gdacs')">Disaster Alerts</button>
 </div>
 <div id="feedContainer"><div class="loading" id="loadingMsg">Connecting to world feeds...</div></div>
 <div class="refresh-bar">
   <button class="refresh-btn" onclick="refreshAll()">REFRESH FEEDS</button>
   <div class="last-refresh" id="lastRefresh"></div>
 </div>
+<section class="sources" aria-labelledby="src-h">
+  <h2 id="src-h">Where these headlines come from</h2>
+  <ul>
+    <li><a href="https://www.bbc.com/news/world">BBC News World</a></li>
+    <li><a href="https://www.aljazeera.com/">Al Jazeera English</a></li>
+    <li><a href="https://www.npr.org/sections/news/">NPR News</a></li>
+    <li><a href="https://news.google.com/search?q=artificial%20intelligence&amp;hl=en-US&amp;gl=US&amp;ceid=US:en">Google News: artificial intelligence</a></li>
+    <li><a href="https://www.gdacs.org/">GDACS disaster alerts</a></li>
+  </ul>
+  <p>The feeds are read through <a href="https://rss2json.com/">RSS2JSON</a>, free and without a key. Back to <a href="https://keywebco.github.io/federation-gods-eye/">God's Eye</a>.</p>
+</section>
 <footer><p>NextXus Federation — World Monitor Panel</p><p>Embeddable: panels/world-monitor.html | Zero paid APIs. Zero tracking. RSS only.</p></footer>
 <script>
-(function(){'use strict';var FEEDS={'bbc':{name:'BBC News World',url:'http://feeds.bbci.co.uk/news/world/rss.xml'},'aljazeera':{name:'Al Jazeera English',url:'https://www.aljazeera.com/xml/rss/all.xml'},'npr':{name:'NPR News',url:'https://feeds.npr.org/1001/rss.xml'},'google-ai':{name:'Google News: AI/Tech',url:'https://news.google.com/rss/search?q=artificial+intelligence&hl=en-US&gl=US&ceid=US:en'},'gdelt':{name:'GDELT Project',url:'https://news.google.com/rss/search?q=GDELT+global+events&hl=en-US&gl=US&ceid=US:en'}};function rss2jsonUrl(u){return'https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(u)}var currentFeed='all',feedCache={};window.selectFeed=function(k){currentFeed=k;var b=document.querySelectorAll('.feed-btn');b.forEach(function(e){e.classList.remove('active')});if(k==='all'){document.querySelector('.feed-btn-all').classList.add('active')}else{b.forEach(function(e){var o=e.getAttribute('onclick');if(o&&o.indexOf("'"+k+"'")!==-1)e.classList.add('active')})}renderFeeds()};window.refreshAll=function(){feedCache={};loadAllFeeds()};function fetchFeed(k,cb){var f=FEEDS[k];if(!f)return cb(k,null,'Unknown');fetch(rss2jsonUrl(f.url)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(d){if(d.status==='ok'&&d.items&&d.items.length>0){var items=d.items.slice(0,5).map(function(i){return{title:i.title||'Untitled',link:i.link||'#',pubDate:i.pubDate||'',source:f.name}});cb(k,items,null)}else{cb(k,null,'No items')}}).catch(function(e){cb(k,null,'Unavailable: '+e.message)})}function loadAllFeeds(){var c=document.getElementById('feedContainer');c.innerHTML='<div class="loading">Connecting...</div>';var keys=Object.keys(FEEDS),rem=keys.length;keys.forEach(function(k){fetchFeed(k,function(kk,items,err){feedCache[kk]=items?{items:items,error:null}:{items:null,error:err};rem--;if(rem===0){renderFeeds();document.getElementById('lastRefresh').textContent='Last: '+new Date().toLocaleString()}})})}function renderFeeds(){var c=document.getElementById('feedContainer'),h='',keys=currentFeed==='all'?Object.keys(FEEDS):[currentFeed];keys.forEach(function(k){var f=FEEDS[k],d=feedCache[k];h+='<div class="feed-panel"><div class="feed-header"><span class="feed-source-label">'+esc(f.name)+'</span>';if(!d){h+='<span class="feed-status">Loading...</span></div><div class="loading">Fetching...</div>'}else if(d.error){h+='<span class="feed-status" style="color:#ff6666">Error</span></div><div class="error-msg">'+esc(d.error)+'</div>'}else{h+='<span class="feed-status" style="color:#00ff88">Live</span></div>';d.items.forEach(function(i){h+='<div class="feed-item"><a href="'+esc(i.link)+'" target="_blank" rel="noopener">'+esc(i.title)+'</a><span class="meta">'+esc(i.source+(i.pubDate?' \u2014 '+new Date(i.pubDate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):''))+'</span></div>'})}h+='</div>'});c.innerHTML=h||'<div class="loading">No feeds.</div>'}function esc(s){var d=document.createElement('div');d.appendChild(document.createTextNode(s));return d.innerHTML}loadAllFeeds();setInterval(function(){feedCache={};loadAllFeeds()},300000)})();
+(function(){'use strict';var FEEDS={'bbc':{name:'BBC News World',url:'https://feeds.bbci.co.uk/news/world/rss.xml'},'aljazeera':{name:'Al Jazeera English',url:'https://www.aljazeera.com/xml/rss/all.xml'},'npr':{name:'NPR News',url:'https://feeds.npr.org/1001/rss.xml'},'google-ai':{name:'Google News: AI/Tech',url:'https://news.google.com/rss/search?q=artificial+intelligence&hl=en-US&gl=US&ceid=US:en'},'gdacs':{name:'GDACS Disaster Alerts',url:'https://www.gdacs.org/xml/rss.xml'}};function rss2jsonUrl(u){return'https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(u)}var currentFeed='all',feedCache={};window.selectFeed=function(k){currentFeed=k;var b=document.querySelectorAll('.feed-btn');b.forEach(function(e){e.classList.remove('active')});if(k==='all'){document.querySelector('.feed-btn-all').classList.add('active')}else{b.forEach(function(e){var o=e.getAttribute('onclick');if(o&&o.indexOf("'"+k+"'")!==-1)e.classList.add('active')})}renderFeeds()};window.refreshAll=function(){feedCache={};loadAllFeeds()};function fetchFeed(k,cb){var f=FEEDS[k];if(!f)return cb(k,null,'Unknown');fetch(rss2jsonUrl(f.url)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(d){if(d.status==='ok'&&d.items&&d.items.length>0){var items=d.items.slice(0,5).map(function(i){return{title:i.title||'Untitled',link:/^https?:\/\//.test(i.link||'')?i.link:'#',pubDate:i.pubDate||'',source:f.name}});cb(k,items,null)}else{cb(k,null,'No items')}}).catch(function(e){cb(k,null,'Unavailable: '+e.message)})}function loadAllFeeds(){var c=document.getElementById('feedContainer');c.innerHTML='<div class="loading">Connecting...</div>';var keys=Object.keys(FEEDS),rem=keys.length;keys.forEach(function(k){fetchFeed(k,function(kk,items,err){feedCache[kk]=items?{items:items,error:null}:{items:null,error:err};rem--;if(rem===0){renderFeeds();document.getElementById('lastRefresh').textContent='Last: '+new Date().toLocaleString()}})})}function renderFeeds(){var c=document.getElementById('feedContainer'),h='',keys=currentFeed==='all'?Object.keys(FEEDS):[currentFeed];keys.forEach(function(k){var f=FEEDS[k],d=feedCache[k];h+='<div class="feed-panel"><div class="feed-header"><span class="feed-source-label">'+esc(f.name)+'</span>';if(!d){h+='<span class="feed-status">Loading...</span></div><div class="loading">Fetching...</div>'}else if(d.error){h+='<span class="feed-status" style="color:#ff6666">Error</span></div><div class="error-msg">'+esc(d.error)+'</div>'}else{h+='<span class="feed-status" style="color:#00ff88">Live</span></div>';d.items.forEach(function(i){h+='<div class="feed-item"><a href="'+esc(i.link)+'" target="_blank" rel="noopener">'+esc(i.title)+'</a><span class="meta">'+esc(i.source+(i.pubDate?' \u2014 '+new Date(i.pubDate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):''))+'</span></div>'})}h+='</div>'});c.innerHTML=h||'<div class="loading">No feeds.</div>'}function esc(s){var d=document.createElement('div');d.appendChild(document.createTextNode(s));return d.innerHTML}loadAllFeeds();setInterval(function(){feedCache={};loadAllFeeds()},300000)})();
 </script>
-<!-- PLAIN-TEXT FALLBACK: Feeds from BBC World, Al Jazeera English, NPR News, Google AI/Tech, GDELT. Proxy: RSS2JSON. NextXus Federation. -->
+
 </body></html>
