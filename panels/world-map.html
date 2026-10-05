@@ -4,466 +4,280 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="echocore64" content="NEXTXUS-FEDERATION-WORLD-MAP">
-  <meta name="description" content="World Map — Live Events. Interactive global map for the NextXus Federation God's Eye dashboard. Sovereign, free, no tracking.">
+  <meta name="description" content="God's Eye world map: live earthquakes (USGS), storms and wildfires (NASA EONET) and disaster alerts (GDACS), with a plain text list and Roger Sim to ask about them. Free, no tracking.">
   <meta name="author" content="NextXus Federation">
-  <title>World Map — God's Eye Live Events</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <title>World Map: Live Earthquakes, Storms, Fires and Disaster Alerts | God's Eye</title>
+  <link rel="canonical" href="https://keywebco.github.io/federation-gods-eye/panels/world-map.html">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #0a0a0f;
-      color: #e8e8e8;
-      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-      overflow: hidden;
-      height: 100vh;
-      width: 100vw;
-    }
-    #map {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0; left: 0;
-    }
-    /* GDELT event markers */
-    .gdelt-marker {
-      background: rgba(255,60,60,0.7);
-      border: 2px solid #ff4444;
-      border-radius: 50%;
-      width: 10px;
-      height: 10px;
-      animation: pulse-dot 2s ease-in-out infinite;
-    }
-    @keyframes pulse-dot {
-      0%, 100% { box-shadow: 0 0 4px rgba(255,60,60,0.5); }
-      50% { box-shadow: 0 0 14px rgba(255,60,60,0.9); }
-    }
-    /* Header overlay */
-    #map-header {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: linear-gradient(180deg, rgba(10,10,15,0.92) 0%, rgba(10,10,15,0.6) 70%, transparent 100%);
-      padding: 0.8rem 1.2rem 1.6rem;
-      text-align: center;
-      pointer-events: none;
-    }
-    #map-header h1 {
-      font-size: 1.4rem;
-      color: #00e5ff;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.15rem;
-    }
-    #map-header p {
-      font-size: 0.8rem;
-      color: #8899aa;
-    }
-    /* Status bar */
-    #status-bar {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: rgba(10,10,15,0.88);
-      border-top: 1px solid #1a1a2e;
-      padding: 0.4rem 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-      color: #8899aa;
-    }
-    #status-bar .event-count { color: #00ff88; font-weight: bold; }
-    #status-bar .refresh-btn {
-      background: #1a1a2e;
-      color: #00e5ff;
-      border: 1px solid #333;
-      border-radius: 4px;
-      padding: 0.2rem 0.6rem;
-      cursor: pointer;
-      font-size: 0.7rem;
-    }
-    #status-bar .refresh-btn:hover { background: #222240; border-color: #00e5ff; }
-
-    /* ========== AI CHAT PANEL ========== */
-    #ai-toggle {
-      position: absolute;
-      bottom: 3rem;
-      right: 1rem;
-      z-index: 1100;
-      background: #00e5ff;
-      color: #0a0a0f;
-      border: none;
-      border-radius: 6px;
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
-      font-weight: bold;
-      cursor: pointer;
-      letter-spacing: 0.04em;
-      box-shadow: 0 2px 12px rgba(0,229,255,0.3);
-      transition: all 0.2s ease;
-    }
-    #ai-toggle:hover { background: #33eeff; box-shadow: 0 2px 18px rgba(0,229,255,0.5); }
-    #ai-panel {
-      display: none;
-      position: absolute;
-      bottom: 3rem;
-      right: 1rem;
-      z-index: 1100;
-      width: 320px;
-      max-height: 420px;
-      background: #111118;
-      border: 1px solid #2a2a3a;
-      border-radius: 10px;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.6);
-    }
-    #ai-panel.open { display: flex; }
-    #ai-panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.6rem 0.8rem;
-      background: #1a1a2e;
-      border-bottom: 1px solid #2a2a3a;
-    }
-    #ai-panel-header span {
-      color: #00e5ff;
-      font-weight: bold;
-      font-size: 0.85rem;
-      letter-spacing: 0.04em;
-    }
-    #ai-close {
-      background: none;
-      border: none;
-      color: #666;
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 0 0.3rem;
-    }
-    #ai-close:hover { color: #ff4444; }
-    #ai-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0.6rem 0.8rem;
-      min-height: 180px;
-      max-height: 280px;
-      font-size: 0.82rem;
-      line-height: 1.5;
-    }
-    .ai-msg {
-      margin-bottom: 0.6rem;
-      padding: 0.5rem 0.7rem;
-      border-radius: 6px;
-      word-wrap: break-word;
-    }
-    .ai-msg.user {
-      background: #1a2a3a;
-      color: #ccc;
-      text-align: right;
-    }
-    .ai-msg.assistant {
-      background: #1a1a2e;
-      color: #e0e0e0;
-      border-left: 2px solid #00e5ff;
-    }
-    .ai-msg.system {
-      background: #1a1a1a;
-      color: #ffcc00;
-      font-style: italic;
-      font-size: 0.78rem;
-      text-align: center;
-    }
-    #ai-input-row {
-      display: flex;
-      border-top: 1px solid #2a2a3a;
-      background: #0e0e14;
-    }
-    #ai-input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      color: #e0e0e0;
-      padding: 0.6rem 0.8rem;
-      font-size: 0.82rem;
-      font-family: inherit;
-      outline: none;
-    }
-    #ai-input::placeholder { color: #555; }
-    #ai-send {
-      background: #00e5ff;
-      color: #0a0a0f;
-      border: none;
-      padding: 0.6rem 0.9rem;
-      font-weight: bold;
-      font-size: 0.78rem;
-      cursor: pointer;
-      letter-spacing: 0.03em;
-    }
-    #ai-send:hover { background: #33eeff; }
-    #ai-send:disabled { background: #333; color: #666; cursor: not-allowed; }
-
-    /* Scrollbar for messages */
-    #ai-messages::-webkit-scrollbar { width: 4px; }
-    #ai-messages::-webkit-scrollbar-track { background: #111118; }
-    #ai-messages::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+    html, body { height: 100%; }
+    body { background: #0a0a0f; color: #f2f2f2; font-family: system-ui, 'Segoe UI', Arial, sans-serif; font-size: 18px; overflow: hidden; }
+    #map { position: absolute; inset: 0; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    a { color: #7fe9ff; }
+    button { font-family: inherit; }
+    button:focus-visible, a:focus-visible, input:focus-visible { outline: 4px solid #ffffff; outline-offset: 2px; }
+    #map-header { position: absolute; top: 0; left: 0; right: 0; z-index: 1000; height: 84px; padding: 10px 16px 0; text-align: center; pointer-events: none;
+      background: linear-gradient(180deg, rgba(10,10,15,.95) 0%, rgba(10,10,15,.7) 70%, transparent 100%); }
+    #map-header h1 { font-size: 1.6rem; color: #ffffff; letter-spacing: .06em; }
+    #map-header p { font-size: 1rem; color: #e0e0e0; }
+    #status-bar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1000; height: 64px; display: flex; align-items: center; gap: 12px; padding: 0 12px;
+      background: rgba(10,10,15,.95); border-top: 2px solid #00b8d4; font-size: 1rem; color: #ffffff; }
+    #status-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bar-btn { height: 46px; min-width: 46px; padding: 0 14px; border-radius: 8px; border: 2px solid #00e5ff; background: #0b2630; color: #ffffff; font-size: 1rem; font-weight: 800; letter-spacing: .04em; cursor: pointer; }
+    .bar-btn:hover { background: #12414f; }
+    .bar-btn.main { background: #00e5ff; color: #000000; }
+    .panel { display: none; position: absolute; z-index: 1100; right: 12px; bottom: 76px; top: 96px; width: min(440px, calc(100% - 24px));
+      flex-direction: column; background: #101018; border: 2px solid #00b8d4; border-radius: 12px; box-shadow: 0 6px 28px rgba(0,0,0,.7); }
+    .panel.open { display: flex; }
+    .panel-head { display: flex; justify-content: space-between; align-items: center; height: 58px; padding: 0 12px; background: #16202a; border-bottom: 2px solid #00b8d4; border-radius: 10px 10px 0 0; }
+    .panel-head h2 { font-size: 1.25rem; color: #ffffff; letter-spacing: .05em; }
+    .panel-body { flex: 1; overflow-y: auto; padding: 12px 14px; font-size: 1.05rem; line-height: 1.55; }
+    .panel-body h3 { font-size: 1.1rem; color: #7fe9ff; margin: 14px 0 6px; }
+    .panel-body ul { padding-left: 1.2em; }
+    .panel-body li { margin: 0 0 8px; }
+    #ai-status { min-height: 3.2em; padding: 8px 14px; font-size: 1rem; color: #ffe27a; border-bottom: 1px solid #2a2a3a; }
+    #ai-messages p { margin: 0 0 12px; white-space: pre-wrap; }
+    #ai-messages .who { display: block; font-weight: 800; color: #7fe9ff; }
+    #ai-messages .you .who { color: #b9f7c8; }
+    #ai-form { display: flex; gap: 8px; padding: 10px; border-top: 2px solid #2a2a3a; }
+    #ai-form label { position: absolute; left: -9999px; }
+    #ai-input { flex: 1; height: 50px; background: #0a0a0f; color: #ffffff; border: 2px solid #00b8d4; border-radius: 8px; padding: 0 10px; font-size: 1.05rem; }
+    .leaflet-popup-content { font-size: 1rem; line-height: 1.45; }
+    .pulse { animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { stroke-opacity: .5; } 50% { stroke-opacity: 1; } }
+    @media (max-width: 560px) { #map-header h1 { font-size: 1.25rem; } #map-header p { font-size: .9rem; } .bar-btn { padding: 0 10px; font-size: .95rem; } #status-text { font-size: .9rem; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
   </style>
 </head>
 <body>
 
-<!-- ====== SEMANTIC PLAIN-TEXT BLOCK (crawler/AI readable) ====== -->
-<noscript>
-<h1>World Map — God's Eye Live Events</h1>
-<p>NextXus Federation sovereign world map. Displays live conflict and event data from GDELT on an interactive global map. Part of the God's Eye dashboard. Zero tracking, zero paid APIs.</p>
-<p>AI Analysis powered by configurable provider (Grok, Gemini, DeepSeek, Groq). Ask questions about current world events.</p>
-<p>Source feeds: GDELT GeoJSON events, BBC World, Al Jazeera English, NPR News.</p>
-</noscript>
+<noscript><p style="position:absolute;top:100px;left:16px;right:16px;z-index:2000;background:#000;color:#fff;padding:16px;font-size:1.2rem">The live map needs JavaScript. You can see the same data at <a href="https://earthquake.usgs.gov/earthquakes/map/">USGS</a>, <a href="https://eonet.gsfc.nasa.gov/">NASA EONET</a> and <a href="https://www.gdacs.org/">GDACS</a>.</p></noscript>
 
-<div id="map"></div>
+<div id="map" role="region" aria-label="Interactive world map"></div>
 
-<div id="map-header">
-  <h1>WORLD MAP — LIVE EVENTS</h1>
-  <p>NextXus Federation — God's Eye | GDELT Conflict &amp; Event Layer</p>
-</div>
+<header id="map-header">
+  <h1>WORLD MAP: LIVE EVENTS</h1>
+  <p>Earthquakes, storms, wildfires and disaster alerts</p>
+</header>
+
+<section class="sr-only" aria-labelledby="about-h">
+  <h2 id="about-h">About this map</h2>
+  <p>This is the NextXus Federation God's Eye world map. It shows live events from three free public sources: earthquakes from the last 24 hours from the US Geological Survey, open storms and wildfires from NASA EONET, and current disaster alerts from GDACS, the Global Disaster Alert and Coordination System.</p>
+  <p>Press the TEXT LIST button to hear every event as a list with links. Press ASK ROGER SIM to ask the Federation's Roger Sim about what is happening. No account and no key are needed. Nothing is tracked.</p>
+  <p>Sources: <a href="https://earthquake.usgs.gov/earthquakes/map/">USGS earthquakes</a>, <a href="https://eonet.gsfc.nasa.gov/">NASA EONET</a>, <a href="https://www.gdacs.org/">GDACS</a>. Back to <a href="https://keywebco.github.io/federation-gods-eye/">God's Eye</a>.</p>
+</section>
 
 <div id="status-bar">
-  <span>Events: <span class="event-count" id="eventCount">0</span> | Source: GDELT GeoJSON</span>
-  <span id="lastUpdate">Loading...</span>
-  <button class="refresh-btn" onclick="loadGDELT()">REFRESH</button>
+  <span id="status-text" role="status">Loading live events.</span>
+  <button class="bar-btn" type="button" id="refresh-btn" aria-label="Refresh the map">REFRESH</button>
+  <button class="bar-btn" type="button" id="list-btn" aria-controls="list-panel" aria-expanded="false">TEXT LIST</button>
+  <button class="bar-btn main" type="button" id="ai-btn" aria-controls="ai-panel" aria-expanded="false">ASK ROGER SIM</button>
 </div>
 
-<!-- AI CHAT TOGGLE BUTTON -->
-<button id="ai-toggle" onclick="toggleAI()">ASK GROK</button>
+<section class="panel" id="list-panel" aria-labelledby="list-h">
+  <div class="panel-head"><h2 id="list-h">EVENTS AS TEXT</h2><button class="bar-btn" type="button" data-close="list-panel" aria-label="Close the text list">CLOSE</button></div>
+  <div class="panel-body" id="list-body"><p>Loading live events.</p></div>
+</section>
 
-<!-- AI CHAT PANEL -->
-<div id="ai-panel">
-  <div id="ai-panel-header">
-    <span id="ai-panel-title">GOD'S EYE AI</span>
-    <button id="ai-close" onclick="toggleAI()">&times;</button>
-  </div>
-  <div id="ai-messages">
-    <div class="ai-msg system" id="ai-welcome"></div>
-  </div>
-  <div id="ai-input-row">
-    <input id="ai-input" type="text" placeholder="Ask about world events..." autocomplete="off" />
-    <button id="ai-send" onclick="sendAI()">SEND</button>
-  </div>
-</div>
+<section class="panel" id="ai-panel" aria-labelledby="ai-h">
+  <div class="panel-head"><h2 id="ai-h">ASK ROGER SIM</h2><button class="bar-btn" type="button" data-close="ai-panel" aria-label="Close Roger Sim">CLOSE</button></div>
+  <p id="ai-status" role="status">Ask about anything on the map, or anything at all.</p>
+  <div class="panel-body" id="ai-messages" role="log" aria-live="polite" aria-label="Conversation with Roger Sim"></div>
+  <form id="ai-form" autocomplete="off">
+    <label for="ai-input">Your question for Roger Sim</label>
+    <input id="ai-input" type="text" maxlength="1000" placeholder="Ask Roger Sim">
+    <button class="bar-btn main" type="submit" id="ai-send">SEND</button>
+  </form>
+</section>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../assets/roger-sim-client.js"></script>
 <script>
-(function() {
+(function () {
   'use strict';
-
-  // ============================================================
-  // AI PROVIDER CONFIG — swap provider here, no other changes needed
-  // Options: 'grok', 'gemini', 'deepseek', 'groq'
-  // ============================================================
-  var AI_CONFIG = {
-    provider: 'grok',
-    key: window.AI_KEY || '',
-    endpoints: {
-      grok:     { url: 'https://api.x.ai/v1/chat/completions',                                    model: 'grok-beta' },
-      gemini:   { url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', model: 'gemini-1.5-flash' },
-      deepseek: { url: 'https://api.deepseek.com/chat/completions',                               model: 'deepseek-chat' },
-      groq:     { url: 'https://api.groq.com/openai/v1/chat/completions',                         model: 'llama3-8b-8192' }
-    }
+  /* Keyless public feeds, each verified with curl on 2026-10-05 (HTTP 200, CORS *). */
+  var FEEDS = {
+    usgs: 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson',
+    eonet: 'https://eonet.gsfc.nasa.gov/api/v3/events/geojson?status=open&days=30&category=severeStorms,wildfires,volcanoes,floods,landslides,earthquakes,dustHaze,drought,tempExtremes',
+    gdacs: 'https://www.gdacs.org/gdacsapi/api/events/geteventlist/EVENTS4APP'
   };
+  var GDACS_TYPES = { EQ: 'Earthquake', TC: 'Tropical cyclone', FL: 'Flood', VO: 'Volcano', DR: 'Drought', WF: 'Wildfire' };
+  var ALERT_COLOR = { Red: '#ff3b3b', Orange: '#ff9f1a', Green: '#3ddc84' };
+  var state = { usgs: [], eonet: [], gdacs: [], errors: [] };
 
-  var AI_SYSTEM_PROMPT = "You are the God's Eye AI — the intelligence layer of the NextXus Federation World Monitor. You have real-time awareness of world events from GDELT, BBC, Al Jazeera, and NPR. Answer questions about current global events clearly and concisely. Keep answers under 150 words unless depth is requested.";
+  var statusText = document.getElementById('status-text');
+  var listBody = document.getElementById('list-body');
 
-  var aiHistory = [];
-  var aiOpen = false;
-
-  // Set button label and welcome message based on provider
-  function initAIPanel() {
-    var toggleBtn = document.getElementById('ai-toggle');
-    var titleEl = document.getElementById('ai-panel-title');
-    var welcomeEl = document.getElementById('ai-welcome');
-
-    if (AI_CONFIG.provider === 'grok') {
-      toggleBtn.textContent = 'ASK GROK';
-      titleEl.textContent = "GOD'S EYE — GROK AI";
-    } else {
-      toggleBtn.textContent = 'ASK AI';
-      titleEl.textContent = "GOD'S EYE AI — " + AI_CONFIG.provider.toUpperCase();
-    }
-
-    if (!AI_CONFIG.key) {
-      welcomeEl.textContent = "Add your AI key to activate. Default: Grok (free at console.x.ai)";
-      document.getElementById('ai-input').disabled = true;
-      document.getElementById('ai-send').disabled = true;
-      document.getElementById('ai-input').placeholder = 'API key required...';
-    } else {
-      welcomeEl.textContent = 'Intelligence layer active. Ask anything about world events.';
-    }
+  function safeUrl(u) { return (typeof u === 'string' && /^https?:\/\//.test(u)) ? u : ''; }
+  function el(tag, text, cls) { var e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; }
+  function popup(title, line, url) {
+    var box = el('div'); box.appendChild(el('strong', title)); if (line) { box.appendChild(el('br')); box.appendChild(document.createTextNode(line)); }
+    if (url) { box.appendChild(el('br')); var a = el('a', 'Read more at the source'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; box.appendChild(a); }
+    return box;
   }
+  function getJSON(url) { return fetch(url).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }); }
 
-  window.toggleAI = function() {
-    aiOpen = !aiOpen;
-    var panel = document.getElementById('ai-panel');
-    var toggle = document.getElementById('ai-toggle');
-    if (aiOpen) {
-      panel.classList.add('open');
-      toggle.style.display = 'none';
-      document.getElementById('ai-input').focus();
-    } else {
-      panel.classList.remove('open');
-      toggle.style.display = 'block';
-    }
-  };
-
-  window.sendAI = function() {
-    var input = document.getElementById('ai-input');
-    var q = input.value.trim();
-    if (!q || !AI_CONFIG.key) return;
-
-    input.value = '';
-    appendMsg('user', q);
-    appendMsg('assistant', '...');
-
-    var ep = AI_CONFIG.endpoints[AI_CONFIG.provider];
-    if (!ep) { replaceLastMsg('Error: unknown provider "' + AI_CONFIG.provider + '"'); return; }
-
-    aiHistory.push({ role: 'user', content: q });
-
-    var messages = [{ role: 'system', content: AI_SYSTEM_PROMPT }].concat(aiHistory.slice(-8));
-
-    fetch(ep.url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + AI_CONFIG.key
-      },
-      body: JSON.stringify({ model: ep.model, messages: messages, max_tokens: 512, temperature: 0.7 })
-    })
-    .then(function(r) {
-      if (!r.ok) return r.text().then(function(t) { throw new Error('HTTP ' + r.status + ': ' + t.slice(0, 200)); });
-      return r.json();
-    })
-    .then(function(data) {
-      var reply = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || 'No response.';
-      aiHistory.push({ role: 'assistant', content: reply });
-      replaceLastMsg(reply);
-    })
-    .catch(function(err) {
-      replaceLastMsg('Error: ' + err.message);
-    });
-  };
-
-  function appendMsg(role, text) {
-    var box = document.getElementById('ai-messages');
-    var div = document.createElement('div');
-    div.className = 'ai-msg ' + role;
-    div.textContent = text;
-    box.appendChild(div);
-    box.scrollTop = box.scrollHeight;
-  }
-
-  function replaceLastMsg(text) {
-    var box = document.getElementById('ai-messages');
-    var msgs = box.querySelectorAll('.ai-msg.assistant');
-    if (msgs.length > 0) {
-      msgs[msgs.length - 1].textContent = text;
-    }
-    box.scrollTop = box.scrollHeight;
-  }
-
-  // Enter key to send
-  document.getElementById('ai-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') { e.preventDefault(); sendAI(); }
-  });
-
-  // ============================================================
-  // MAP INITIALIZATION
-  // ============================================================
-  var map = L.map('map', {
-    center: [20, 0],
-    zoom: 3,
-    minZoom: 2,
-    maxZoom: 12,
-    zoomControl: false
-  });
-
+  /* ---- Map ---- */
+  var map = L.map('map', { center: [20, 0], zoom: 2, minZoom: 2, maxZoom: 12, worldCopyJump: true, zoomControl: false });
   L.control.zoom({ position: 'topleft' }).addTo(map);
-
-  // Dark CartoDB tile layer
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '',
-    subdomains: 'abcd',
-    maxZoom: 19
+    subdomains: 'abcd', maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attribution/">CARTO</a>'
   }).addTo(map);
+  var layers = { usgs: L.layerGroup().addTo(map), eonet: L.layerGroup().addTo(map), gdacs: L.layerGroup().addTo(map) };
+  L.control.layers(null, { 'Earthquakes (USGS)': layers.usgs, 'Storms and fires (NASA EONET)': layers.eonet, 'Disaster alerts (GDACS)': layers.gdacs }, { position: 'topright', collapsed: true }).addTo(map);
 
-  var eventLayer = L.layerGroup().addTo(map);
+  function dot(lat, lng, color, radius, content, layer) {
+    if (!isFinite(lat) || !isFinite(lng)) return;
+    /* Drawing a marker must never break the data: if it fails, the event still reaches the text list. */
+    try { L.circleMarker([lat, lng], { radius: radius, color: color, weight: 2, fillColor: color, fillOpacity: .55, className: 'pulse' }).bindPopup(content).addTo(layer); }
+    catch (e) { state.drawErrors = (state.drawErrors || 0) + 1; }
+  }
 
-  // ============================================================
-  // GDELT LIVE EVENTS
-  // ============================================================
-  var GDELT_URL = 'https://api.gdeltproject.org/api/v2/geo/geo?query=conflict%20OR%20protest%20OR%20crisis%20OR%20war%20OR%20earthquake%20OR%20flood&mode=pointdata&format=geojson&maxpoints=80&timespan=24h';
+  function loadUSGS() {
+    return getJSON(FEEDS.usgs).then(function (g) {
+      layers.usgs.clearLayers();
+      state.usgs = (g.features || []).filter(function (f) { return f.geometry && f.geometry.coordinates; }).map(function (f) {
+        var p = f.properties || {}, c = f.geometry.coordinates;
+        var mag = typeof p.mag === 'number' ? p.mag : null;
+        var item = { title: 'Magnitude ' + (mag == null ? 'unknown' : mag.toFixed(1)) + ' earthquake, ' + (p.place || 'location not given'), mag: mag == null ? -9 : mag, time: p.time, url: safeUrl(p.url) };
+        dot(c[1], c[0], '#ffb020', Math.max(4, Math.min(16, (mag || 1) * 2.6)), popup(item.title, p.time ? new Date(p.time).toLocaleString() : '', item.url), layers.usgs);
+        return item;
+      }).sort(function (a, b) { return b.mag - a.mag; });
+    }).catch(function (e) { state.usgs = []; state.errors.push('earthquakes (' + e.message + ')'); });
+  }
 
-  window.loadGDELT = function() {
-    document.getElementById('lastUpdate').textContent = 'Updating...';
-    eventLayer.clearLayers();
-
-    fetch(GDELT_URL)
-    .then(function(r) {
-      if (!r.ok) throw new Error('GDELT HTTP ' + r.status);
-      return r.json();
-    })
-    .then(function(geo) {
-      if (!geo.features) { document.getElementById('eventCount').textContent = '0'; return; }
-
-      var count = 0;
-      geo.features.forEach(function(f) {
-        if (!f.geometry || !f.geometry.coordinates) return;
-        var lng = f.geometry.coordinates[0];
-        var lat = f.geometry.coordinates[1];
-        var props = f.properties || {};
-        var name = props.name || props.html || 'Event';
-        var url = props.url || props.shareimage || '';
-
-        // Strip HTML tags from name
-        var cleanName = name.replace(/<[^>]*>/g, '').slice(0, 120);
-
-        var icon = L.divIcon({ className: 'gdelt-marker', iconSize: [10, 10] });
-        var marker = L.marker([lat, lng], { icon: icon });
-
-        var popup = '<div style="font-size:0.8rem;max-width:220px;color:#ccc;background:#111118;padding:0.5rem;border-radius:4px;border:1px solid #2a2a3a;">'
-          + '<strong style="color:#00e5ff;">' + cleanName + '</strong>';
-        if (url) popup += '<br><a href="' + url + '" target="_blank" rel="noopener" style="color:#4dc9f6;font-size:0.75rem;">Read more</a>';
-        popup += '</div>';
-
-        marker.bindPopup(popup, { className: 'dark-popup' });
-        eventLayer.addLayer(marker);
-        count++;
+  function loadEONET() {
+    return getJSON(FEEDS.eonet).then(function (g) {
+      layers.eonet.clearLayers();
+      state.eonet = (g.features || []).map(function (f) {
+        var p = f.properties || {}, cat = (p.categories && p.categories[0] && p.categories[0].title) || 'Natural event';
+        var src = safeUrl(p.sources && p.sources[0] && p.sources[0].url);
+        var c = null;
+        if (f.geometry && f.geometry.type === 'Point') c = f.geometry.coordinates;
+        else if (f.geometry && f.geometry.type === 'LineString' && f.geometry.coordinates.length) c = f.geometry.coordinates[f.geometry.coordinates.length - 1];
+        var item = { title: (p.title || 'Event') + ' (' + cat + ')', date: p.date, url: src, id: p.id };
+        if (c) dot(c[1], c[0], /fire/i.test(cat) ? '#ff4d4d' : '#4dc9ff', 7, popup(item.title, p.date ? 'Last update ' + new Date(p.date).toLocaleDateString() : '', src), layers.eonet);
+        return item;
       });
+      /* EONET repeats one storm per track point: keep the newest entry per event id for the text list. */
+      var seen = {}; state.eonet = state.eonet.filter(function (i) { if (seen[i.id || i.title]) return false; seen[i.id || i.title] = 1; return true; });
+    }).catch(function (e) { state.eonet = []; state.errors.push('storms and fires (' + e.message + ')'); });
+  }
 
-      document.getElementById('eventCount').textContent = count;
-      var now = new Date();
-      document.getElementById('lastUpdate').textContent = 'Updated: ' + now.toLocaleTimeString();
-    })
-    .catch(function(err) {
-      document.getElementById('lastUpdate').textContent = 'Feed error: ' + err.message;
-      console.error('GDELT load error:', err);
+  function loadGDACS() {
+    return getJSON(FEEDS.gdacs).then(function (g) {
+      layers.gdacs.clearLayers();
+      var rank = { Red: 3, Orange: 2, Green: 1 };
+      state.gdacs = (g.features || []).filter(function (f) { return f.geometry && f.geometry.coordinates; }).map(function (f) {
+        var p = f.properties || {}, c = f.geometry.coordinates, lvl = p.alertlevel || 'Green';
+        var item = { title: lvl + ' alert: ' + (p.name || GDACS_TYPES[p.eventtype] || 'Disaster event'), level: lvl, rank: rank[lvl] || 0, url: safeUrl(p.url && p.url.report) };
+        dot(c[1], c[0], ALERT_COLOR[lvl] || '#3ddc84', lvl === 'Red' ? 12 : lvl === 'Orange' ? 9 : 6, popup(item.title, p.fromdate ? 'From ' + p.fromdate.slice(0, 10) : '', item.url), layers.gdacs);
+        return item;
+      }).sort(function (a, b) { return b.rank - a.rank; });
+    }).catch(function (e) { state.gdacs = []; state.errors.push('disaster alerts (' + e.message + ')'); });
+  }
+
+  function renderList() {
+    listBody.textContent = '';
+    function group(heading, items, max, empty) {
+      listBody.appendChild(el('h3', heading + ': ' + items.length));
+      if (!items.length) { listBody.appendChild(el('p', empty)); return; }
+      var ul = el('ul');
+      items.slice(0, max).forEach(function (i) {
+        var li = el('li');
+        if (i.url) { var a = el('a', i.title); a.href = i.url; a.target = '_blank'; a.rel = 'noopener'; li.appendChild(a); } else li.textContent = i.title;
+        ul.appendChild(li);
+      });
+      listBody.appendChild(ul);
+      if (items.length > max) listBody.appendChild(el('p', 'Showing the first ' + max + '. All of them are on the map.'));
+    }
+    group('Disaster alerts, most serious first', state.gdacs, 25, 'No disaster alerts could be loaded right now.');
+    group('Earthquakes in the last 24 hours, strongest first', state.usgs, 25, 'No earthquake data could be loaded right now.');
+    group('Open storms and wildfires', state.eonet, 25, 'No storm or wildfire data could be loaded right now.');
+  }
+
+  window.loadAll = function () {
+    state.errors = [];
+    statusText.textContent = 'Loading live events.';
+    return Promise.all([loadUSGS(), loadEONET(), loadGDACS()]).then(function () {
+      var t = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      statusText.textContent = 'Earthquakes ' + state.usgs.length + '. Storms and fires ' + state.eonet.length + '. Alerts ' + state.gdacs.length + '. Updated ' + t + '.' +
+        (state.errors.length ? ' Not loaded: ' + state.errors.join(', ') + '.' : '');
+      renderList();
     });
   };
 
-  // Initial load
-  loadGDELT();
-  initAIPanel();
+  /* ---- Panels ---- */
+  function setPanel(id, open) {
+    document.getElementById(id).classList.toggle('open', open);
+    var btn = document.getElementById(id === 'ai-panel' ? 'ai-btn' : 'list-btn');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) {
+      var other = id === 'ai-panel' ? 'list-panel' : 'ai-panel';
+      document.getElementById(other).classList.remove('open');
+      document.getElementById(other === 'ai-panel' ? 'ai-btn' : 'list-btn').setAttribute('aria-expanded', 'false');
+      (id === 'ai-panel' ? document.getElementById('ai-input') : document.getElementById('list-h')).focus();
+    } else btn.focus();
+  }
+  document.getElementById('list-h').tabIndex = -1;
+  document.getElementById('list-btn').addEventListener('click', function () { setPanel('list-panel', !document.getElementById('list-panel').classList.contains('open')); });
+  document.getElementById('ai-btn').addEventListener('click', function () {
+    var open = !document.getElementById('ai-panel').classList.contains('open');
+    setPanel('ai-panel', open);
+    if (open && !aiChecked) checkSim();
+  });
+  document.getElementById('refresh-btn').addEventListener('click', function () { window.loadAll(); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-close]'), function (b) { b.addEventListener('click', function () { setPanel(b.getAttribute('data-close'), false); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { ['ai-panel', 'list-panel'].forEach(function (id) { if (document.getElementById(id).classList.contains('open')) setPanel(id, false); }); } });
 
-  // Auto-refresh every 5 minutes
-  setInterval(loadGDELT, 300000);
+  /* ---- Roger Sim (no API key in this page: the server-side proxy handles credentials) ---- */
+  var aiStatus = document.getElementById('ai-status'), aiLog = document.getElementById('ai-messages');
+  var aiForm = document.getElementById('ai-form'), aiInput = document.getElementById('ai-input'), aiSend = document.getElementById('ai-send');
+  var aiHistory = [], aiChecked = false;
+  function say(role, text) {
+    var p = el('p', null, role); p.appendChild(el('span', role === 'you' ? 'YOU' : 'ROGER SIM', 'who')); p.appendChild(document.createTextNode(text));
+    aiLog.appendChild(p); aiLog.scrollTop = aiLog.scrollHeight;
+  }
+  function checkSim() {
+    aiChecked = true;
+    if (!window.RogerSim) { aiStatus.textContent = 'Roger Sim could not load on this page. Please email keywebco@gmail.com.'; return; }
+    aiStatus.textContent = 'Checking whether Roger Sim is awake.';
+    RogerSim.health().then(function (h) {
+      aiStatus.textContent = h.online ? 'Roger Sim is online. Ask about anything on the map, or anything at all.' : RogerSim.offlineText;
+    }).catch(function () { aiStatus.textContent = RogerSim.offlineText; });
+  }
+  function context() {
+    var lines = [];
+    state.gdacs.slice(0, 5).forEach(function (i) { lines.push(i.title); });
+    state.usgs.slice(0, 5).forEach(function (i) { lines.push(i.title); });
+    state.eonet.slice(0, 5).forEach(function (i) { lines.push(i.title); });
+    return 'The visitor is on the God\'s Eye world map of the NextXus Federation. Live events now shown on the map (USGS, NASA EONET, GDACS): ' +
+      (lines.length ? lines.join('; ') : 'none loaded') + '. Answer plainly and briefly unless asked for depth.';
+  }
+  aiForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var q = aiInput.value.trim();
+    if (!q || aiSend.disabled || !window.RogerSim) return;
+    aiInput.value = '';
+    say('you', q);
+    aiHistory.push({ role: 'user', content: q });
+    aiSend.disabled = true; aiSend.textContent = 'WAIT';
+    aiStatus.textContent = 'Roger Sim is thinking. This can take up to a minute.';
+    RogerSim.ask([{ role: 'system', content: context() }].concat(aiHistory.slice(-10))).then(function (reply) {
+      aiHistory.push({ role: 'assistant', content: reply }); say('sim', reply);
+      aiStatus.textContent = 'Roger Sim is online. Ask another question any time.';
+    }).catch(function (err) {
+      aiHistory.pop(); say('sim', RogerSim.friendly(err));
+      aiStatus.textContent = 'No answer that time. You can ask again.';
+    }).then(function () { aiSend.disabled = false; aiSend.textContent = 'SEND'; });
+  });
 
+  window.loadAll();
+  setInterval(window.loadAll, 600000);
 })();
 </script>
-
-<!-- PLAIN TEXT SUMMARY FOR CRAWLERS -->
-<div style="position:absolute;left:-9999px;" aria-hidden="true">
-  <h2>World Map — God's Eye Live Events (Plain Text)</h2>
-  <p>This is an interactive world map showing live global events from the GDELT Project (Global Database of Events, Language, and Tone). Events include conflicts, protests, crises, natural disasters, and geopolitical developments from the past 24 hours.</p>
-  <p>Data source: GDELT GeoJSON API — free, open, no API key required. Map tiles: CartoDB Dark. Map library: Leaflet.js.</p>
-  <p>AI Analysis: Integrated chat panel with configurable provider (Grok/xAI default, Gemini, DeepSeek, Groq). All providers use OpenAI-compatible API format. Swap provider by changing one config variable.</p>
-  <p>Part of the NextXus Federation God's Eye sovereign dashboard. Zero tracking. Zero subscriptions. Built for the Senate.</p>
-</div>
 </body>
 </html>
